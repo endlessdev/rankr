@@ -1,5 +1,5 @@
 # PortalRank
-Portal sites of realtime rank Node.js REST Application
+Portal sites of realtime rank Node.js REST Application.
 
 #### Install
 <pre>
