@@ -1,6 +1,7 @@
 /**
  * Created by Seungwoo on 2016. 2. 22..
  */
+"use strict";
 
 let cheerio = require('cheerio'),
     request = require('request');
