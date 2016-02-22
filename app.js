@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var rank = require('./routes/rank')
+
 var app = express();
 
 // view engine setup
@@ -56,5 +58,9 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+
+app.get('/caption/naver', rank.naver);
+app.get('/caption/daum', rank.daum);
 
 module.exports = app;
