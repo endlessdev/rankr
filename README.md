@@ -1,5 +1,5 @@
 # PortalRank
-Portal sites of realtime rank Node.js REST Application
+Portal sites of realtime rank Node.js REST Application.
 
 #### Install
 <pre>
@@ -10,7 +10,10 @@ $ npm install
 <pre>
 $ npm start
 </pre>
-
+or
+<pre>
+$ node --harmony app.js
+</pre>
 ## API Overview
 
 **Naver realtime rank**
