@@ -10,10 +10,6 @@ $ npm install
 <pre>
 $ npm start
 </pre>
-or
-<pre>
-$ node --harmony app.js
-</pre>
 ## API Overview
 
 **Naver realtime rank**
