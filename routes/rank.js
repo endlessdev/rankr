@@ -1,22 +1,20 @@
 /**
  * Created by Seungwoo on 2016. 2. 22..
  */
-"use strict";
-
-let cheerio = require('cheerio'),
+var cheerio = require('cheerio'),
     request = require('request');
 
 exports.naver = function (req, response, next) {
-    let url = 'http://www.naver.com';
+    var url = 'http://www.naver.com';
 
-    let rankData = {
+    var rankData = {
         title: String,
         rank: Number,
         status: String,
         url: String
     };
 
-    let rankResult = {
+    var rankResult = {
         result: {type: Number, default: 0},
         time:  Math.floor(Date.now() / 1000),
         type: "naver",
@@ -25,7 +23,7 @@ exports.naver = function (req, response, next) {
 
     request(url, function (err, res, html) {
         if (!err) {
-            let $ = cheerio.load(html);
+            var $ = cheerio.load(html);
             rankResult.result = 1;
             $('ol#realrank a').each(function (i, elem) {
 
@@ -52,16 +50,16 @@ exports.naver = function (req, response, next) {
 };
 
 exports.daum = function (req, response, next) {
-    let url = 'http://www.daum.net';
+    var url = 'http://www.daum.net';
 
-    let rankData = {
+    var rankData = {
         title: String,
         rank: Number,
         status: String,
         url: String
     };
 
-    let rankResult = {
+    var rankResult = {
         result: {type: Number, default: 0},
         time:  Math.floor(Date.now() / 1000),
         type : "daum",
@@ -70,11 +68,11 @@ exports.daum = function (req, response, next) {
 
     request(url, function (err, res, html) {
         if (!err) {
-            let $ = cheerio.load(html);
+            var $ = cheerio.load(html);
             rankResult.result = 1;
             $('ol#realTimeSearchWord > li > div.roll_txt > div:not(.rank_dummy)').each(function (i, elem) {
 
-                let data = $(this);
+                var data = $(this);
 
                 if(i<10){
                     rankResult.data[i] = {
@@ -96,6 +94,6 @@ exports.daum = function (req, response, next) {
     })
 };
 
-let realEscape = function (target) {
+var realEscape = function (target) {
     return target.replace(/\n/gi,'');
 };
