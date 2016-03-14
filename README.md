@@ -1,12 +1,14 @@
 # PortalRank
-Portal sites of realtime rank Node.js REST Application.
+한국 포털사이트의 실시간 급상승 인기검색어의 비공식 REST API입니다.
 
-#### Install
+Node.js 애플리케이션으로 개발되었습니다.
+
+#### Install Dependency
 <pre>
 $ npm install
 </pre>
 
-#### Run
+#### Running Application
 <pre>
 $ npm start
 </pre>
@@ -23,6 +25,12 @@ http://www.naver.com
 http://www.daum.net
 
  - ```GET``` /rank/daum
+
+**Nate realtime rank**
+
+http://www.nate.com
+
+ - ```GET``` /rank/nate
  
 ###Response JSON Example
 
@@ -40,6 +48,12 @@ http://www.daum.net
   ]
 }
 ```
+
+##Milestone
+
+ - [ ] Nate Parsing
+ - [ ] Google Trend Parsing
+
 ##License
 Follow **MIT LICENCE**
 

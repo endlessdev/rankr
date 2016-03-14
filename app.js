@@ -7,8 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-var rank = require('./routes/rank')
+var ranks = require('./routes/ranks');
 
 var app = express();
 
@@ -26,6 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.get('/rank/naver', ranks.naver);
+app.get('/rank/daum', ranks.daum);
+app.get('/rank/nate', ranks.nate);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -58,9 +61,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
-
-app.get('/caption/naver', rank.naver);
-app.get('/caption/daum', rank.daum);
 
 module.exports = app;
