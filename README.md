@@ -1,5 +1,7 @@
 # PortalRank
-The popular potal sites realtime popularity search word ranking of south korea RESTful API
+한국 포털사이트의 실시간 급상승 인기검색어의 비공식 REST API입니다.
+
+Node.js 애플리케이션으로 개발되었습니다.
 
 #### Install Dependency
 <pre>
@@ -52,16 +54,7 @@ http://www.nate.com
  - [ ] Nate Parsing
  - [ ] Google Trend Parsing
 
-##Thanks to
-### **Cheerio**
- 
-For HTML parsing to use [cheerio HTML parser](https://github.com/cheeriojs/cheerio) of 3rd party node module.
-
- 
-### **Request**
-
-For receive Request response [Request - Simplified HTTP client](https://github.com/request/request) 3rd party of node module
-
 ##License
-Under the  **MIT LICENCE**
+Follow **MIT LICENCE**
 
+using Cheerio HTML parser of node module.
