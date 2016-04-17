@@ -1,26 +1,27 @@
 /**
- * Created by Seungwoo on 2016. 2. 22..
+ * @author Jade Yeom ysw0094@gmail.com
+ * @desc this module will get request ranking data from potal sites
+ * @required ../app.js, ../views/routes/index.js
  */
+
 "use strict";
+/** for ECMAScript6 **/
 
 let cheerio = require('cheerio'),
-    request = require('request');
+    request = require('request'),
+    feedparser = require('feedparser');
 
-var rankData = {
-    title: String,
-    rank: Number,
-    status: String,
-    url: String,
-    value: String
 
+let defaultHeader = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'X-Requested-With'
 };
 
-var rankResult = {
-    result: {type: Number, default: 0},
-    time: Math.floor(Date.now() / 1000),
-    type: String,
-    data: [rankData]
-};
+/**
+ * @desc this global params for call from external stuff through getRank method
+ * @var naverParam, daumParam, nateParam
+ */
 
 let naverParam = {
     type: 'naver',
@@ -45,11 +46,11 @@ let daumParam = {
     parserSelecter: function ($, elem) {
         var data = $(elem);
         return {
-            title: realEscape(data.find("span.txt_issue > a").text()),
+            title: realStringEscape(data.find("span.txt_issue > a").text()),
             rank: '',
-            status: data.find("span.screen_out").text(),
+            status: data.find("em.img_vert").text().replace(/[1-9]/g, ''),
             url: data.find("span.txt_issue > a").attr('href'),
-            value: data.find("em.img_vert").text()
+            value: parseInt(data.find("em.img_vert").text().replace(/\D/g, ''))
         }
     }
 };
@@ -65,20 +66,35 @@ let nateParam = {
             rank: '',
             status: data.find("p > em").text(),
             url: data.find("p > a").attr('href')
-        }
+        };
     }
 };
 
-let defaultHeader = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'X-Requested-With'
+/**
+ * @desc this two global variables for send response with model
+ */
+
+var rankData = {
+    title: String,
+    rank: Number,
+    status: String,
+    url: String,
+    value: Number
 };
+
+var rankResult = {
+    result: {type: Number, default: 0},
+    time: Math.floor(Date.now() / 1000),
+    type: String,
+    data: [rankData]
+};
+
 
 exports.naver = function (req, res) {
     getRank(naverParam, function (result) {
         res.set(defaultHeader);
         res.send(result);
+        return result;
     });
 };
 
@@ -87,16 +103,32 @@ exports.daum = function (req, res) {
     getRank(daumParam, function (result) {
         res.set(defaultHeader);
         res.send(result);
+        return result;
     });
 };
 
 
 exports.nate = function (req, res) {
+
     getRank(nateParam, function (result) {
         res.set(defaultHeader);
         res.send(result);
+        return result;
     });
 };
+
+exports.rss = function (req, res) {
+    feedparser.parseUrl(req.body.targetUrl, function (err, meta, articles) {
+        if (err) throw err;
+        res.set(defaultHeader);
+        res.send(JSON.stringify(articles));
+    })
+};
+
+/**
+ * @param param is contain request param, cheerio parser param
+ * @param handleResult Method for Response Handling
+ */
 
 function getRank(param, handleResult) {
     let endpoint = param.host;
@@ -110,6 +142,9 @@ function getRank(param, handleResult) {
                 if (i < 10) {
                     rankResult.data[i] = selectParams;
                     rankResult.data[i].rank = i + 1;
+                    if (rankResult.data[i].value == null) {
+                        delete rankResult.data[i].value;
+                    }
                 }
             });
             handleResult(rankResult);
@@ -119,7 +154,11 @@ function getRank(param, handleResult) {
     });
 }
 
+/**
+ * @param target is escaping target
+ * @returns after escape string through regular expression
+ */
 
-let realEscape = function (target) {
+function realStringEscape(target) {
     return target.replace(/\n/gi, '');
-};
+}
