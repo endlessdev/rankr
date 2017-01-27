@@ -1,27 +1,29 @@
 "use strict";
 
+require('dotenv').config();
+
 let cron = require('cron'),
     CronJob = cron.CronJob,
     mysql = require('mysql'),
     request = require('request');
 
 var connectionPool = mysql.createPool({
-    host: 'yeom.me',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'PortalRank',
-    charset: "utf8_general_ci"
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    charset: process.env.DB_CHARSET
 });
 
 var job = new CronJob({
-    cronTime: '* * * * *',
+    cronTime: '* * * * * *',
     timeZone: 'Asia/Seoul',
     onTick: function () {
-        var rankTypes = ["naver", "daum"];
+        var rankTypes = ["naver", "daum", "nate"];
         rankTypes.forEach(function (rank) {
             request(`http://localhost:3000/rank/${rank}`, function (error, response, body) {
-                var body = JSON.parse(body);
+                let body = JSON.parse(body);
                 if (!error && response.statusCode == 200) {
                     body.data.forEach(function (rankItem) {
                         var currentDate = new Date();
@@ -32,6 +34,8 @@ var job = new CronJob({
                                 if (err) {
                                     console.error(err);
                                     throw err;
+                                } else {
+                                    console.log('')
                                 }
                                 connection.release();
                             });
