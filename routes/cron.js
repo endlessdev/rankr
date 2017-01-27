@@ -7,7 +7,7 @@ let cron = require('cron'),
     mysql = require('mysql'),
     request = require('request');
 
-var connectionPool = mysql.createPool({
+let connectionPool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -16,34 +16,59 @@ var connectionPool = mysql.createPool({
     charset: process.env.DB_CHARSET
 });
 
-var job = new CronJob({
-    cronTime: '* * * * * *',
-    timeZone: 'Asia/Seoul',
-    onTick: function () {
-        var rankTypes = ["naver", "daum", "nate"];
-        rankTypes.forEach(function (rank) {
-            request(`http://localhost:3000/rank/${rank}`, function (error, response, body) {
-                let body = JSON.parse(body);
+let connectWithRetry = function () {
+    return connectionPool.connect(function (err) {
+        if (err) {
+            console.error('Failed to connect to mysql on startup - retrying in 5 sec', err);
+            setTimeout(connectWithRetry, 5000);
+        } else {
+            console.log('Success connecting to mysql')
+        }
+    });
+};
+
+let insertQuery = 'INSERT INTO ranks_logs SET ?';
+
+let crawlRank = () => {
+    let rankTypes = ["naver", "daum", "nate"];
+    rankTypes.forEach(function (rank) {
+            let requestURL = `http://localhost:3000/rank/${rank}`;
+            request(requestURL, (error, response, body) => {
+                let parsedBody = JSON.parse(body);
                 if (!error && response.statusCode == 200) {
-                    body.data.forEach(function (rankItem) {
-                        var currentDate = new Date();
-                        connectionPool.getConnection(function (err, connection) {
+                    parsedBody.data.forEach(rankItem => {
+                        let currentDate = new Date();
+                        connectionPool.getConnection((err, connection) => {
                             rankItem['created_at'] = currentDate;
                             rankItem['type'] = rank;
-                            connection.query('insert into ranks_logs set ?', rankItem, function (err, result) {
+                            connection.query(insertQuery, rankItem, err => {
                                 if (err) {
                                     console.error(err);
                                     throw err;
                                 } else {
-                                    console.log('')
+                                    console.log(new Date() + '크롤링 한 데이터가 성공적으로 데이터베이스에 삽입되었습니다.');
+                                    connection.release();
                                 }
-                                connection.release();
                             });
                         });
                     });
+                } else {
+                    console.log('비정상적인 리스폰스 입니다.');
                 }
-            })
-        });
-    }
-});
-job.start();
+            });
+        }
+    );
+};
+
+let crawlWhenTick = function () {
+    crawlRank();
+};
+
+let jobParams = {
+    cronTime: '* * * * *',
+    timeZone: 'Asia/Seoul',
+    onTick: crawlWhenTick
+};
+
+let crawlingJob = new CronJob(jobParams);
+crawlingJob.start();
