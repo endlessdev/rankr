@@ -1,38 +1,45 @@
 "use strict";
 
-let cron = require('cron');
-let CronJob = cron.CronJob;
-let mysql = require('mysql');
-let request = require('request');
+let cron = require('cron'),
+    CronJob = cron.CronJob,
+    mysql = require('mysql'),
+    request = require('request');
 
-var DB = mysql.DB;
-
-var DBConnection = new DB({
+var connectionPool = mysql.createPool({
     host: 'yeom.me',
+    port: 3306,
     user: 'root',
     password: '',
-    database: 'PortalRank'
+    database: 'PortalRank',
+    charset: "utf8_general_ci"
 });
 
 var job = new CronJob({
-    cronTime: '* * * * * *',
+    cronTime: '* * * * *',
+    timeZone: 'Asia/Seoul',
     onTick: function () {
-        request('http://localhost:3000/rank/naver', function (error, response, body) {
-            var body = JSON.parse(body);
-            if (!error && response.statusCode == 200) {
-                for (var item of body.data) {
-                    var query = DBConnection.query('insert into ranks_logs set ?',item,function(err,result){
-                        if (err) {
-                            console.error(err);
-                            throw err;
-                        } else {
-                            console.log('asdf');
-                        }
+        var rankTypes = ["naver", "daum"];
+        rankTypes.forEach(function (rank) {
+            request(`http://localhost:3000/rank/${rank}`, function (error, response, body) {
+                var body = JSON.parse(body);
+                if (!error && response.statusCode == 200) {
+                    body.data.forEach(function (rankItem) {
+                        var currentDate = new Date();
+                        connectionPool.getConnection(function (err, connection) {
+                            rankItem['created_at'] = currentDate;
+                            rankItem['type'] = rank;
+                            connection.query('insert into ranks_logs set ?', rankItem, function (err, result) {
+                                if (err) {
+                                    console.error(err);
+                                    throw err;
+                                }
+                                connection.release();
+                            });
+                        });
                     });
                 }
-            }
-        })
-    },
-    timeZone: 'Asia/Seoul'
+            })
+        });
+    }
 });
 job.start();
