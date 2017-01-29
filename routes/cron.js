@@ -66,7 +66,7 @@ let crawlWhenTick = function () {
 
 let jobParams = {
     cronTime: '* * * * *',
-    timeZone: 'Asia/Seoul',
+    timeZone: process.env.CRON_TIMEZONE,
     onTick: crawlWhenTick
 };
 
