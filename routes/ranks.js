@@ -58,14 +58,15 @@ let daumParam = {
 let nateParam = {
     type: 'nate',
     host: 'http://www.nate.com',
-    selecter: 'ol#realTimeSearchWord > li > div.roll_txt > div:not(.rank_dummy)',
+    selecter: '.kwd_list:not(.type_biz) > ol > li',
     parserSelecter: function ($, elem) {
         var data = $(elem);
         return {
             title: data.find("p > a").attr('title').text(),
-            rank: '',
+            rank: data.find("p > .icon > em"),
             status: data.find("p > em").text(),
-            url: data.find("p > a").attr('href')
+            url: data.find("p > a").attr('href'),
+            value: '',
         };
     }
 };
@@ -84,11 +85,9 @@ var rankData = {
 
 var rankResult = {
     result: {type: Number, default: 0},
-    time: Math.floor(Date.now() / 1000),
     type: String,
     data: [rankData]
 };
-
 
 exports.naver = function (req, res) {
     getRank(naverParam, function (result) {
@@ -109,7 +108,6 @@ exports.daum = function (req, res) {
 
 
 exports.nate = function (req, res) {
-
     getRank(nateParam, function (result) {
         res.set(defaultHeader);
         res.send(result);
@@ -132,19 +130,21 @@ exports.rss = function (req, res) {
 
 function getRank(param, handleResult) {
     let endpoint = param.host;
+    console.log(endpoint);
     request(endpoint, function (err, res, html) {
+        console.log(html);
         if (!err) {
             let $ = cheerio.load(html);
             rankResult.result = 1;
+            rankResult.type = param.type;
+            rankResult.date = new Date();
+            console.log($(param.selecter));
             $(param.selecter).each(function (i, elem) {
                 var selectParams = param.parserSelecter($, elem);
-                rankResult.type = param.type;
-                if (i < 10) {
-                    rankResult.data[i] = selectParams;
-                    rankResult.data[i].rank = i + 1;
-                    if (rankResult.data[i].value == null) {
-                        delete rankResult.data[i].value;
-                    }
+                rankResult.data[i] = selectParams;
+                rankResult.data[i].rank = i + 1;
+                if (rankResult.data[i].value == null) {
+                    delete rankResult.data[i].value;
                 }
             });
             handleResult(rankResult);
