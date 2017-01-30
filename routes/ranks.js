@@ -9,7 +9,7 @@
 
 let cheerio = require('cheerio'),
     request = require('request'),
-    feedparser = require('feedparser');
+    rtj = require('rss-to-json');
 
 
 let defaultHeader = {
@@ -116,11 +116,11 @@ exports.nate = function (req, res) {
 };
 
 exports.rss = function (req, res) {
-    feedparser.parseUrl(req.body.targetUrl, function (err, meta, articles) {
+    rtj.load(req.params.targetURL, function(err, rss){
         if (err) throw err;
         res.set(defaultHeader);
-        res.send(JSON.stringify(articles));
-    })
+        res.send(rss);
+    });
 };
 
 /**
@@ -132,13 +132,12 @@ function getRank(param, handleResult) {
     let endpoint = param.host;
     console.log(endpoint);
     request(endpoint, function (err, res, html) {
-        console.log(html);
         if (!err) {
+
             let $ = cheerio.load(html);
             rankResult.result = 1;
             rankResult.type = param.type;
             rankResult.date = new Date();
-            console.log($(param.selecter));
             $(param.selecter).each(function (i, elem) {
                 var selectParams = param.parserSelecter($, elem);
                 rankResult.data[i] = selectParams;

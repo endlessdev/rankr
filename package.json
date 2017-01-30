@@ -13,11 +13,11 @@
     "debug": "~2.2.0",
     "dotenv": "^4.0.0",
     "express": "~4.13.1",
-    "feedparser": "^2.1.0",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "mysql": "^2.13.0",
     "request": "^2.79.0",
+    "rss-to-json": "^1.0.2",
     "serve-favicon": "~2.3.0"
   }
 }
