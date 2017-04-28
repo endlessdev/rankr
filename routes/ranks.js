@@ -9,7 +9,8 @@
 
 let cheerio = require('cheerio'),
     request = require('request'),
-    rtj = require('rss-to-json');
+    rtj = require('rss-to-json'),
+    phantom = require('phantom');
 
 
 let defaultHeader = {
@@ -26,14 +27,13 @@ let defaultHeader = {
 let naverParam = {
     type: 'naver',
     host: 'http://www.naver.com',
-    selecter: 'ol#realrank a',
-    parserSelecter: function ($, elem) {
+    selector: 'ul.ah_l:first-child li.ah_item > a',
+    parserSelector: function ($, elem) {
         var data = $(elem);
         return {
-            title: data.attr('title'),
-            status: data.find('.tx').text(),
-            rank: '',
-            url: data.attr('href'),
+            title: data.find('.ah_k').text(),
+            rank: data.find('.ah_r').text(),
+            url: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + encodeURI(data.find('.ah_k').text()),
             value: data.find('.rk').text()
         };
     }
@@ -42,15 +42,15 @@ let naverParam = {
 let daumParam = {
     type: 'daum',
     host: 'http://www.daum.net',
-    selecter: 'ol#realTimeSearchWord > li > div.roll_txt > div:not(.rank_dummy)',
-    parserSelecter: function ($, elem) {
+    selector: 'ol.list_hotissue > li .rank_cont:not([aria-hidden])',
+    parserSelector: function ($, elem) {
         var data = $(elem);
         return {
-            title: realStringEscape(data.find("span.txt_issue > a").text()),
+            title: data.find('.txt_issue > a').attr('title'),
             rank: '',
-            status: data.find("em.img_vert").text().replace(/[1-9]/g, ''),
-            url: data.find("span.txt_issue > a").attr('href'),
-            value: parseInt(data.find("em.img_vert").text().replace(/\D/g, ''))
+            status: data.find("em.rank_result .ir_wa").text(),
+            url: data.find('.txt_issue > a').attr('href'),
+            value: data.find("em.rank_result").text().replace(/[^0-9]/g, "")
         }
     }
 };
@@ -58,15 +58,14 @@ let daumParam = {
 let nateParam = {
     type: 'nate',
     host: 'http://www.nate.com',
-    selecter: '.kwd_list:not(.type_biz) > ol > li',
-    parserSelecter: function ($, elem) {
+    selector: '.kwd_list:not(.type_biz) > ol > li > p',
+    parserSelector: function ($, elem) {
         var data = $(elem);
         return {
-            title: data.find("p > a").attr('title').text(),
-            rank: data.find("p > .icon > em"),
-            status: data.find("p > em").text(),
-            url: data.find("p > a").attr('href'),
-            value: '',
+            title: data.find('a').attr('title'),
+            status: data.find(".icon").text(),
+            url: data.find("a").attr('href'),
+            value: data.find(".icon > em").text(),
         };
     }
 };
@@ -116,7 +115,7 @@ exports.nate = function (req, res) {
 };
 
 exports.rss = function (req, res) {
-    rtj.load(req.params.targetURL, function(err, rss){
+    rtj.load(req.params.targetURL, function (err, rss) {
         if (err) throw err;
         res.set(defaultHeader);
         res.send(rss);
@@ -131,24 +130,32 @@ exports.rss = function (req, res) {
 function getRank(param, handleResult) {
     let endpoint = param.host;
     console.log(endpoint);
-    request(endpoint, function (err, res, html) {
-        if (!err) {
+    if (param.type == "nate") {
+    //    TODO Using PhantomJS
+    } else {
+        request(endpoint, function (err, res, html) {
+            if (!err) {
+                handleRankData(html, param);
+                handleResult(rankResult);
+            } else {
+                throw err;
+            }
+        });
+    }
+}
 
-            let $ = cheerio.load(html);
-            rankResult.result = 1;
-            rankResult.type = param.type;
-            rankResult.date = new Date();
-            $(param.selecter).each(function (i, elem) {
-                var selectParams = param.parserSelecter($, elem);
-                rankResult.data[i] = selectParams;
-                rankResult.data[i].rank = i + 1;
-                if (rankResult.data[i].value == null) {
-                    delete rankResult.data[i].value;
-                }
-            });
-            handleResult(rankResult);
-        } else {
-            throw err;
+function handleRankData(html, param) {
+    let $ = cheerio.load(html);
+
+    rankResult.result = 1;
+    rankResult.type = param.type;
+    rankResult.date = new Date();
+    $(param.selector).each(function (i, elem) {
+        var selectParams = param.parserSelector($, elem);
+        rankResult.data[i] = selectParams;
+        rankResult.data[i].rank = i + 1;
+        if (rankResult.data[i].value == null) {
+            delete rankResult.data[i].value;
         }
     });
 }
