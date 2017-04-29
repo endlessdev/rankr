@@ -16,12 +16,12 @@ module.exports = {
                 primaryKey: true,
                 autoIncrement: true
             },
-            createdAt : {
-                type :  Sequelize.DATE,
-                defaultValue : Sequelize.NOW
+            type: {
+                type: Sequelize.ENUM('naver', 'nate', 'daum')
             },
-            type : {
-               type : Sequelize.ENUM('naver', 'nate', 'daum')
+            createdAt: {
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW
             }
         })
     },
@@ -34,5 +34,6 @@ module.exports = {
          Example:
          return queryInterface.dropTable('users');
          */
+        return queryInterface.dropTable('rank_crawl_logs');
     }
 };
