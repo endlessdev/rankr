@@ -7,11 +7,11 @@ const iconv = new Iconv('euc-kr', 'utf-8');
 export class NateParser {
     public static getNateRank(onResponse) {
 
-        let rankResult:RankResult = {
-            resultCode : 200,
-            rankType : "nate",
-            requestDate : new Date(),
-            data : []
+        let rankResult: RankResult = {
+            resultCode: 200,
+            rankType: "nate",
+            requestDate: new Date(),
+            data: []
         };
 
         const endpoint = "http://www.nate.com/nate5/getlivekeyword";
@@ -22,9 +22,9 @@ export class NateParser {
         };
 
         request(requestOptions, (err, response, html)=> {
-            var encodedResponse = iconv.convert(html).toString();
-            var parcedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
-            for (let keyword of parcedResponse) {
+            let encodedResponse = iconv.convert(html).toString();
+            let parsedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
+            for (let keyword of parsedResponse) {
                 rankResult.data.push({
                     rank: keyword[0],
                     title: keyword[1],
