@@ -5,6 +5,9 @@ const Iconv = require('iconv').Iconv;
 const iconv = new Iconv('euc-kr', 'utf-8');
 
 export class NateParser {
+
+    private static API_ENDPOINT = "http://www.nate.com/nate5/getlivekeyword";
+
     public static getNateRank(onResponse) {
 
         let rankResult: RankResult = {
@@ -14,10 +17,8 @@ export class NateParser {
             data: []
         };
 
-        const endpoint = "http://www.nate.com/nate5/getlivekeyword";
-
         const requestOptions = {
-            url: endpoint,
+            url: this.API_ENDPOINT,
             encoding: null
         };
 
