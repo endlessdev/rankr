@@ -10,8 +10,9 @@
 let cheerio = require('cheerio'),
     request = require('request'),
     rtj = require('rss-to-json'),
-    phantom = require('phantom');
+    Iconv = require('iconv').Iconv;
 
+let iconv = new Iconv('euc-kr', 'utf-8');
 
 let defaultHeader = {
     'Content-Type': 'application/json',
@@ -33,8 +34,6 @@ let naverParam = {
         return {
             title: data.find('.ah_k').text(),
             rank: data.find('.ah_r').text(),
-            url: "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + encodeURI(data.find('.ah_k').text()),
-            value: data.find('.rk').text()
         };
     }
 };
@@ -49,7 +48,6 @@ let daumParam = {
             title: data.find('.txt_issue > a').attr('title'),
             rank: '',
             status: data.find("em.rank_result .ir_wa").text(),
-            url: data.find('.txt_issue > a').attr('href'),
             value: data.find("em.rank_result").text().replace(/[^0-9]/g, "")
         }
     }
@@ -107,10 +105,9 @@ exports.daum = function (req, res) {
 
 
 exports.nate = function (req, res) {
-    getRank(nateParam, function (result) {
+    getNateRank(rankResult => {
         res.set(defaultHeader);
-        res.send(result);
-        return result;
+        res.send(rankResult);
     });
 };
 
@@ -122,16 +119,40 @@ exports.rss = function (req, res) {
     });
 };
 
+function getNateRank(onResponse) {
+    rankResult.result = 1;
+    rankResult.type = "nate";
+    rankResult.date = new Date();
+    rankResult.data = [];
+    let endpoint = "http://www.nate.com/nate5/getlivekeyword";
+    var requestOptions = {
+        url : endpoint,
+        encoding : null
+    };
+    request(requestOptions, (err, response, html)=> {
+        var encodedResponse = iconv.convert(html).toString();
+        var parcedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
+        for (let keyword of parcedResponse) {
+            rankResult.data.push({
+                rank: keyword[0],
+                title: keyword[1],
+                status: keyword[2],
+                value: keyword[3]
+            });
+        }
+        onResponse(rankResult);
+    });
+}
+
 /**
  * @param param is contain request param, cheerio parser param
  * @param handleResult Method for Response Handling
  */
-
 function getRank(param, handleResult) {
     let endpoint = param.host;
     console.log(endpoint);
     if (param.type == "nate") {
-    //    TODO Using PhantomJS
+        //    TODO Using PhantomJS
     } else {
         request(endpoint, function (err, res, html) {
             if (!err) {
@@ -158,13 +179,4 @@ function handleRankData(html, param) {
             delete rankResult.data[i].value;
         }
     });
-}
-
-/**
- * @param target is escaping target
- * @returns after escape string through regular expression
- */
-
-function realStringEscape(target) {
-    return target.replace(/\n/gi, '');
 }
