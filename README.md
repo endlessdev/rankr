@@ -1,7 +1,11 @@
-# PortalRank
-The popular potal sites realtime popularity search word ranking of south korea RESTful API
+<p align="center">
+    <img width="300" src='http://svgshare.com/i/1Tv.svg'/><br>
+    <a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
+</p>
 
-#### Install Dependency
+## Get started
+
+#### Install Dependencies
 <pre>
 $ npm install
 </pre>
@@ -10,6 +14,7 @@ $ npm install
 <pre>
 $ npm start
 </pre>
+
 ## API Overview
 
 **Naver realtime rank**
@@ -30,7 +35,7 @@ http://www.nate.com
 
  - ```GET``` /rank/nate
  
-###Response JSON Example
+### Response JSON Example
 
 ```json
 {
@@ -47,23 +52,12 @@ http://www.nate.com
 }
 ```
 
-##Milestone
+## Milestone
 
- - [ ] Nate Parsing
  - [ ] Google Trend Parsing
  - [ ] Web Font-end page
 
-##Thanks to
-### **Cheerio**
- 
-For HTML parsing to use [cheerio HTML parser](https://github.com/cheeriojs/cheerio) of 3rd party node module.
+## License
 
- 
-### **Request**
-
-For receive Request response [Request - Simplified HTTP client](https://github.com/request/request) 3rd party of node module
-
-## **License**
-
-Under the  **MIT LICENCE**
+Follow the  **MIT LICENCE**
 
