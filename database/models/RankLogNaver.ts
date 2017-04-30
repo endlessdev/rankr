@@ -1,4 +1,4 @@
-const database = require('../database'),
+const database = require('../index'),
     sequelize = database.sequelize,
     Sequelize = database.Sequelize;
 
