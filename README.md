@@ -60,6 +60,14 @@ $ gulp
 ```
 
 ## Crawler
+
+Crawler stores Rank data in the database every time it runs.
+
+### Database
+
+Using Sequelize for ORM
+
+### Running
 It automatically run when started Application
 
 ## Milestone
@@ -67,6 +75,7 @@ It automatically run when started Application
  - [ ] Google Trend Parsing
  - [ ] Visuallizer web page
  - [ ] Parse and crawl news contents
+ - [ ] Do stuff with Neural network (Please suggest to me)
 
 ## License
 
