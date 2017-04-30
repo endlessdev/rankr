@@ -8,12 +8,12 @@ var serverTS = ["**/*.ts", "!node_modules/**", '!bin/**'];
 
 gulp.task('ts', ['clean'], function() {
     return gulp
-        .src(serverTS, {base: './'})
-        .pipe(ts({ module: 'commonjs', noImplicitAny: true }))
+        .src(serverTS, { base: './' })
+        .pipe(ts({ module: 'commonjs', target: "es6", noImplicitAny: true }))
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('clean', function () {
+gulp.task('clean', function() {
     return gulp
         .src([
             'app.js',
@@ -22,17 +22,17 @@ gulp.task('clean', function () {
             '!node_modules/**',
             '!gulpfile.js',
             '!bin/**'
-        ], {read: false})
+        ], { read: false })
         .pipe(clean())
 });
 
-gulp.task('load:fixtures', function (cb) {
+gulp.task('load:fixtures', function(cb) {
     var load = require('./fixtures/load');
     return load.loadData(cb);
 });
 
 gulp.task('server:start', ['ts'], function() {
-    server.listen({path: 'bin/www'}, function(error) {
+    server.listen({ path: './Application.js' }, function(error) {
         console.log(error);
     });
 });
@@ -47,14 +47,14 @@ gulp.task('default', ['server:start'], function() {
 
 gulp.task('test', ['ts', 'load:fixtures'], function() {
     return gulp
-        .src('test/*.js', {read: false})
+        .src('test/*.js', { read: false })
         // wait for dev server to start properly :(
         //.pipe(wait(600))
         .pipe(mocha())
-        .once('error', function () {
+        .once('error', function() {
             process.exit(1);
         })
-        .once('end', function () {
+        .once('end', function() {
             process.exit();
         });
 });

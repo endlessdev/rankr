@@ -1,8 +1,10 @@
 import {ParserParam} from "../models/ParserParam";
 import {RankResult} from "../models/RankResult";
 import {Rank} from "../models/Rank";
+import {changeFormattedStatus} from "../utils/Formatter";
 import * as request from "request";
 import * as cheerio from "cheerio";
+import {RankStatus} from "../models/RankStatus";
 
 /**
  * Created by jade on 29/04/2017.
@@ -47,8 +49,10 @@ export class CommonParser {
                 rank: i + 1,
                 value: resultData.value,
                 title: resultData.title,
-                status : resultData.status
             };
+            if (resultData.status) {
+                rankData.status = <RankStatus>changeFormattedStatus(resultData.status);
+            }
             self.rankResult.data.push(rankData);
         });
 
