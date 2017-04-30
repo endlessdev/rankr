@@ -67,6 +67,7 @@ class Application {
 
 let application = new Application();
 application.startServer();
+require('./database/crawler').crawlStart();
 
 process.on("SIGINT", ()=> {
     application.stopServer();
