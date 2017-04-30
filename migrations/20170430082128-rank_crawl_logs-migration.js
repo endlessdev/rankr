@@ -7,9 +7,9 @@ module.exports = {
          Return a promise to correctly handle asynchronicity.
 
          Example:
+
          return queryInterface.createTable('users', { id: Sequelize.INTEGER });
          */
-
         return queryInterface.createTable('rank_crawl_logs', {
             idx: {
                 type: Sequelize.INTEGER,
@@ -23,7 +23,9 @@ module.exports = {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.NOW
             }
-        })
+        }, {
+            timestamps: false,
+        });
     },
 
     down: function (queryInterface, Sequelize) {
