@@ -1,39 +1,42 @@
 <p align="center">
     <img width="300" src='http://svgshare.com/i/1Tv.svg'/><br>
+    <span>REST Application of portal sites realtime rank API </span><br><br>
     <a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
     <a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/travis/endlessdev/rankr.svg?branch=master&style=flat-square"></a>
-    
 </p>
 
 ## Get started
 
-#### Install Dependencies
+**Install Dependencies**
 <pre>
 $ npm install
 </pre>
 
-#### Running Application
+**Run Migrations** (Optional - For crawler)
+
+using sequelize-cli
 <pre>
-$ npm start
+$ sequelize db:migrate --env [database env]
+</pre>
+
+**Running Application**
+
+Make transcompiling, cleaning, serve by setted gulpfile of gulp
+<pre>
+$ gulp
 </pre>
 
 ## API Overview
 
 **Naver realtime rank**
 
-http://www.naver.com
-
  - ```GET``` /rank/naver 
 
 **Daum realtime rank**
 
-http://www.daum.net
-
  - ```GET``` /rank/daum
 
 **Nate realtime rank**
-
-http://www.nate.com
 
  - ```GET``` /rank/nate
  
@@ -41,23 +44,29 @@ http://www.nate.com
 
 ```json
 {
-  "result": 1,
-  "time": 1455988400,
+  "resultCode": 200,
+  "rankType": "daum",
+  "requestDate": "2017-04-30T12:37:15.554Z",
   "data": [
     {
-      "status": "상승",
-      "title": "이상희",
       "rank": 1,
-      "url": "http://search.naver.com/search.naver?where=nexearch&query=%EC%9D%B4%EC%83%81%ED%9D%AC&sm=top_lve&ie=utf8"
+      "value": "481",
+      "title": "신동엽",
+      "status": "up"
     },
+    ...
   ]
 }
 ```
 
+## Crawler
+It automatically run when started Application
+
 ## Milestone
 
  - [ ] Google Trend Parsing
- - [ ] Web Font-end page
+ - [ ] Visuallizer web page
+ - [ ] Parse and crawl news contents
 
 ## License
 
