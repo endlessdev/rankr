@@ -1,5 +1,6 @@
 import {RankResult} from "../models/RankResult";
 import * as request from "request";
+import {changeFormattedStatus} from "../utils/Formatter";
 
 const Iconv = require('iconv').Iconv;
 const iconv = new Iconv('euc-kr', 'utf-8');
@@ -29,7 +30,7 @@ export class NateParser {
                 rankResult.data.push({
                     rank: keyword[0],
                     title: keyword[1],
-                    status: keyword[2],
+                    status: changeFormattedStatus(keyword[2]),
                     value: keyword[3]
                 });
             }
