@@ -11,7 +11,8 @@ const database = require('./index'),
     sequelize = database.sequelize,
     Sequelize = database.Sequelize,
     CronJob = require('cron').CronJob,
-    parser = new CommonParser();
+    naverParser:CommonParser = new CommonParser(),
+    daumParser:CommonParser = new CommonParser();
 
 
 let crawlJob = new CronJob({
@@ -21,8 +22,8 @@ let crawlJob = new CronJob({
         sequelize.sync().then(function () {
             return RankCrawlLog.model.create({}).then((crawlLog) => {
                 crawlLog = crawlLog.get({plain: true});
-                parser.setParam(paramNaver);
-                parser.getRank(function (rankResult) {
+                naverParser.setParam(paramNaver);
+                naverParser.getRank(function (rankResult) {
                     for (let rank of rankResult.data) {
                         RankLogNaver.model.create({
                             rank_crawl_idx: crawlLog.idx,
@@ -33,15 +34,15 @@ let crawlJob = new CronJob({
                         });
                     }
                 });
-                parser.setParam(paramDaum);
-                parser.getRank(function (rankResult) {
+                daumParser.setParam(paramDaum);
+                daumParser.getRank(function (rankResult) {
                     for (let rank of rankResult.data) {
                         RankLogDaum.model.create({
                             rank_crawl_idx: crawlLog.idx,
                             rank: rank.rank,
                             title: rank.title,
-                            status : rank.status,
-                            value : rank.value
+                            status: rank.status,
+                            value: rank.value
                         }).catch(Sequelize.ValidationError, err => {
                             console.log(err);
                         });
@@ -53,8 +54,8 @@ let crawlJob = new CronJob({
                             rank_crawl_idx: crawlLog.idx,
                             rank: rank.rank,
                             title: rank.title,
-                            status : rank.status,
-                            value : rank.value
+                            status: rank.status,
+                            value: rank.value
                         }).catch(Sequelize.ValidationError, err => {
                             console.log(err);
                         });
