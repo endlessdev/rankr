@@ -60,3 +60,15 @@ internal/
 yarn.lock
 .env
 /config/config.json
+
+/models/**/*.js
+/models/**/*.map
+
+/database/**/*.js
+/database/**/*.map
+
+/utils/**/*.js
+/utils/**/*.map
+
+/routes/**/*.js
+/routes/**/*.map
