@@ -58,3 +58,5 @@ internal/
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
 yarn.lock
+.env
+/config/config.json

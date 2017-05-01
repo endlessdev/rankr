@@ -26,11 +26,6 @@ gulp.task('clean', function() {
         .pipe(clean())
 });
 
-gulp.task('load:fixtures', function(cb) {
-    var load = require('./fixtures/load');
-    return load.loadData(cb);
-});
-
 gulp.task('server:start', ['ts'], function() {
     server.listen({ path: './Application.js' }, function(error) {
         console.log(error);

@@ -1,37 +1,34 @@
 "use strict";
-var request = require("request");
-var Iconv = require('iconv').Iconv;
-var iconv = new Iconv('euc-kr', 'utf-8');
-var NateParser = (function () {
-    function NateParser() {
-    }
-    NateParser.getNateRank = function (onResponse) {
-        var rankResult = {
+const request = require("request");
+const Formatter_1 = require("../utils/Formatter");
+const Iconv = require('iconv').Iconv;
+const iconv = new Iconv('euc-kr', 'utf-8');
+class NateParser {
+    static getNateRank(onResponse) {
+        let rankResult = {
             resultCode: 200,
             rankType: "nate",
             requestDate: new Date(),
             data: []
         };
-        var endpoint = "http://www.nate.com/nate5/getlivekeyword";
-        var requestOptions = {
-            url: endpoint,
+        const requestOptions = {
+            url: this.API_ENDPOINT,
             encoding: null
         };
-        request(requestOptions, function (err, response, html) {
-            var encodedResponse = iconv.convert(html).toString();
-            var parcedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
-            for (var _i = 0, parcedResponse_1 = parcedResponse; _i < parcedResponse_1.length; _i++) {
-                var keyword = parcedResponse_1[_i];
+        request(requestOptions, (err, response, html) => {
+            let encodedResponse = iconv.convert(html).toString();
+            let parsedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
+            for (let keyword of parsedResponse) {
                 rankResult.data.push({
                     rank: keyword[0],
                     title: keyword[1],
-                    status: keyword[2],
+                    status: Formatter_1.changeFormattedStatus(keyword[2]),
                     value: keyword[3]
                 });
             }
             onResponse(rankResult);
         });
-    };
-    return NateParser;
-}());
+    }
+}
+NateParser.API_ENDPOINT = "http://www.nate.com/nate5/getlivekeyword";
 exports.NateParser = NateParser;
