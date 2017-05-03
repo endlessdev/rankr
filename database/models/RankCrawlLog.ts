@@ -8,9 +8,6 @@ exports.model = sequelize.define('rank_crawl_logs', {
         primaryKey: true,
         autoIncrement: true
     },
-    type: {
-        type: Sequelize.ENUM('naver', 'nate', 'daum')
-    },
     createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

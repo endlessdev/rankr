@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+    up: function(queryInterface, Sequelize) {
         /*
          Add altering commands here.
          Return a promise to correctly handle asynchronicity.
@@ -16,9 +16,6 @@ module.exports = {
                 primaryKey: true,
                 autoIncrement: true
             },
-            type: {
-                type: Sequelize.ENUM('naver', 'nate', 'daum')
-            },
             createdAt: {
                 type: Sequelize.DATE,
                 defaultValue: Sequelize.NOW
@@ -28,7 +25,7 @@ module.exports = {
         });
     },
 
-    down: function (queryInterface, Sequelize) {
+    down: function(queryInterface, Sequelize) {
         /*
          Add reverting commands here.
          Return a promise to correctly handle asynchronicity.
