@@ -1,7 +1,9 @@
-<img width="300" src='http://svgshare.com/i/1Tv.svg'/><br>
-<span>REST Application of portal sites realtime rank API </span><br><br>
-<a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
-<a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/travis/endlessdev/rankr.svg?branch=master&style=flat-square"></a>
+<p align="center">
+    <img width="300" src='https://cdn.rawgit.com/endlessdev/rankr/master/public/images/rankr.svg'/><br>
+    <span>REST Application of portal sites realtime rank API </span><br><br>
+    <a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/travis/endlessdev/rankr.svg?branch=master&style=flat-square"></a>
+</p>
 
 ## Get started
 
