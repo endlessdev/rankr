@@ -1,7 +1,8 @@
 {
   "name": "rankr",
   "scripts": {
-    "start": "node bin/www"
+    "start": "node bin/www",
+    "dev"  : "webpack --watch"
   },
   "version": "0.0.0",
   "description": "",
@@ -33,6 +34,7 @@
     "sequelize-cli": "^2.7.0",
     "serve-favicon": "~2.3.0",
     "superagent": "^1.7.1",
+    "ts-loader": "^2.0.3",
     "tsd": "^0.6.5",
     "underscore": "^1.8.3"
   },
@@ -42,6 +44,7 @@
     "pow-mongodb-fixtures": "^0.13.0",
     "should": "^8.1.1",
     "should-http": "0.0.4",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "webpack": "^2.5.1"
   }
 }

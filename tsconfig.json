@@ -1,0 +1,15 @@
+{
+  "exclude": [
+    "node_modules",
+    "bower_components"
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "sourceMap": true,
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false
+  }
+}
