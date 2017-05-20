@@ -11,7 +11,7 @@ import crawler from './database/crawler'
 const app = new Koa()
 const port = process.env.PORT || 3000
 const dist = path.join(__dirname, '..', 'public')
- const bpOption = {extendTypes: {json: ['application/x-javascript']}}
+const bpOption = {extendTypes: {json: ['application/x-javascript']}}
 
 app
   .use(logger())
