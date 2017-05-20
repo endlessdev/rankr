@@ -2,15 +2,13 @@ import {CommonParser} from "../utils/CommonParser"
 import {NateParser} from "../utils/NateParser"
 import {paramDaum} from "../models/params/DaumParam"
 import {paramNaver} from "../models/params/NaverParam"
+import {sequelize, Sequelize} from "../database/index";
 import * as RankLogNaver from "../database/models/RankLogNaver"
 import * as RankLogNate from "../database/models/RankLogNate"
 import * as RankLogDaum from "../database/models/RankLogDaum"
 import * as RankCrawlLog from "../database/models/RankCrawlLog"
 
-const database = require('./index'),
-    sequelize = database.sequelize,
-    Sequelize = database.Sequelize,
-    CronJob = require('cron').CronJob,
+const CronJob = require('cron').CronJob,
     naverParser: CommonParser = new CommonParser(),
     daumParser: CommonParser = new CommonParser();
 

@@ -2,15 +2,19 @@ import {ParserParam} from "../models/ParserParam";
 import {RankResult} from "../models/RankResult";
 import {Rank} from "../models/Rank";
 import {changeFormattedStatus} from "../utils/Formatter";
-import * as request from "request";
-import * as cheerio from "cheerio";
 import {RankStatus} from "../models/RankStatus";
+
+const request = require('request'),
+    cheerio = require('cheerio');
 
 /**
  * Created by jade on 29/04/2017.
  */
 
+
+
 export class CommonParser {
+
 
     private parserParam: ParserParam;
     private rankResult: RankResult;
@@ -31,7 +35,7 @@ export class CommonParser {
     }
 
     private handleRankData(html: string) {
-        let $: any = cheerio.load(html);
+        let $:any = cheerio.load(html);
 
         this.rankResult = {
             resultCode: 200,
