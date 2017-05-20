@@ -3,12 +3,13 @@
 import * as http from "http";
 import * as express from "express";
 import * as path from "path";
-import * as morgan from "morgan";
-import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
 import {Express, Request, Response} from "express";
 
 import rank from './routes/rank';
+
+const morgan = require("morgan"),
+    bodyParser = require("body-parser"),
+    cookieParser = require("cookie-parser");
 
 class Application {
     private app: Express;

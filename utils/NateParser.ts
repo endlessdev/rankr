@@ -1,15 +1,15 @@
 import {RankResult} from "../models/RankResult";
-import * as request from "request";
 import {changeFormattedStatus} from "../utils/Formatter";
 
-const Iconv = require('iconv').Iconv;
-const iconv = new Iconv('euc-kr', 'utf-8');
+const iconv = require('iconv-lite'),
+    request = require('request');
 
 export class NateParser {
 
     private static API_ENDPOINT = "http://www.nate.com/nate5/getlivekeyword";
 
     public static getNateRank(onResponse) {
+
 
         let rankResult: RankResult = {
             resultCode: 200,
@@ -24,7 +24,7 @@ export class NateParser {
         };
 
         request(requestOptions, (err, response, html)=> {
-            let encodedResponse = iconv.convert(html).toString();
+            let encodedResponse = iconv.decode(html, 'UTF-8').toString();
             let parsedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
             for (let keyword of parsedResponse) {
                 rankResult.data.push({

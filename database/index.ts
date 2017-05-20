@@ -1,17 +1,12 @@
-import * as dotenv from "dotenv"
-const Sequelize = require("sequelize");
+const dotenv = require('dotenv');
 
 dotenv.config();
 
-let sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    timestamps: false,
-});
+export const Sequelize = require('sequelize');
 
 let connectWithRetry = () => {
     return sequelize.authenticate()
-        .then(()=> {
+        .then(() => {
             console.log('Connection has been established successfully.');
         })
         .catch(err => {
@@ -22,5 +17,8 @@ let connectWithRetry = () => {
 
 connectWithRetry();
 
-exports.sequelize = sequelize;
-exports.Sequelize = Sequelize;
+export const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    timestamps: false,
+});

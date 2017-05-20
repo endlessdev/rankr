@@ -1,9 +1,8 @@
 import {RankResult} from "../models/RankResult";
-import * as request from "request";
-import {changeFormattedStatus} from "../utils/Formatter";
 
 const Iconv = require('iconv').Iconv;
-const iconv = new Iconv('euc-kr', 'utf-8');
+const iconv = new Iconv('euc-kr', 'utf-8'),
+    request = require('request');
 
 export class GoogleParser {
 

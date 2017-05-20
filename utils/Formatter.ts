@@ -1,4 +1,5 @@
-export let changeFormattedStatus = (status: string) => {
+import {RankStatus} from "../models/RankStatus";
+export let changeFormattedStatus = (status: string) : RankStatus => {
     if(!status) return null;
     if (status.indexOf("상승") != -1 || status.indexOf("+") != -1) {
         return "up";

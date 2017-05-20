@@ -1,8 +1,6 @@
-const database = require('../index'),
-    sequelize = database.sequelize,
-    Sequelize = database.Sequelize;
+import {sequelize, Sequelize} from "../index"
 
-exports.model = sequelize.define('rank_crawl_logs', {
+export let model = sequelize.define('rank_crawl_logs', {
     idx: {
         type: Sequelize.INTEGER,
         primaryKey: true,
