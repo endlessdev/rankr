@@ -23,8 +23,7 @@ router.get('/daum', (ctx, next) => {
   ctx.body = await parser.getRank()
 })
 
-router.get('/nate', (ctx, next) => {
-  ctx.body = await Nateparser.getNateRank()
-})
+router.get('/nate', (ctx, next) => 
+  (ctx.body = await Nateparser.getNateRank())
 
 export default router;
