@@ -1,6 +1,6 @@
 import {ParserParam} from "../ParserParam";
 
-export let paramNaver: ParserParam = {
+let parserParam  : ParserParam={
     type: "naver",
     url: 'http://www.naver.com',
     querySelector: 'ul.ah_l:first-child li.ah_item > a',
@@ -12,3 +12,5 @@ export let paramNaver: ParserParam = {
         };
     }
 };
+
+export default parserParam;
