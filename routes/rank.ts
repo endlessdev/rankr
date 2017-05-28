@@ -8,14 +8,10 @@ import {CommonParser} from "../utils/CommonParser";
 import {NateParser} from "../utils/NateParser";
 import {paramNaver} from "../models/params/NaverParam";
 import {paramDaum} from "../models/params/DaumParam";
+import {paramZum} from"../models/params/ZumParam";
 
 let router = express();
 let parser = new CommonParser();
-
-/* GET home page. */
-router.get('/', (req: Request, res: Response, next: Function) => {
-    res.render('index', {title: 'Express'})
-});
 
 router.get('/naver', (req: Request, res: Response, next: Function) => {
     parser.setParam(paramNaver);
@@ -34,6 +30,16 @@ router.get('/daum', (req: Request, res: Response, next: Function) => {
         return result;
     });
 });
+
+router.get('/zum', (req: Request, res: Response, next: Function) => {
+    parser.setParam(paramZum);
+    parser.getRank(function (result) {
+        res.set(CommonHeader);
+        res.send(result);
+        return result;
+    });
+});
+
 
 router.get('/nate', (req: Request, res: Response, next: Function) => {
     NateParser.getNateRank(rankResult => {
