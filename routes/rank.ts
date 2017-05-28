@@ -1,45 +1,31 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
-import * as express from "express";
-import {Request, Response} from "express"
-import {CommonHeader} from '../models/CommonHeader';
+import * as Router from 'koa-router'
 
-import {CommonParser} from "../utils/CommonParser";
-import {NateParser} from "../utils/NateParser";
-import {paramNaver} from "../models/params/NaverParam";
-import {paramDaum} from "../models/params/DaumParam";
-
-let router = express();
+import CommonParser from "../utils/CommonParser";
+import NateParser from "../utils/NateParser";
+import paramNaver from "../models/params/NaverParam";
+import paramDaum from "../models/params/DaumParam";
+import async = Q.async;
 let parser = new CommonParser();
 
+const router = new Router({prefix: '/rank'});
+
 /* GET home page. */
-router.get('/', (req: Request, res: Response, next: Function) => {
-    res.render('index', {title: 'Express'})
-});
 
-router.get('/naver', (req: Request, res: Response, next: Function) => {
+router.get('/naver', async (ctx, next) => {
     parser.setParam(paramNaver);
-    parser.getRank(function (result) {
-        res.set(CommonHeader);
-        res.send(result);
-        return result;
-    });
+    ctx.body = await parser.getRank();
 });
 
-router.get('/daum', (req: Request, res: Response, next: Function) => {
+router.get('/daum', async (ctx, next) => {
     parser.setParam(paramDaum);
-    parser.getRank(function (result) {
-        res.set(CommonHeader);
-        res.send(result);
-        return result;
-    });
+    ctx.body = await parser.getRank();
 });
 
-router.get('/nate', (req: Request, res: Response, next: Function) => {
-    NateParser.getNateRank(rankResult => {
-        res.set(CommonHeader);
-        res.send(rankResult);
-    })
+router.get('/nate', async (ctx, next) => {
+    ctx.body = await NateParser.getNateRank()
 });
+
 
 export default router;

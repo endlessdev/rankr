@@ -2,14 +2,13 @@ import {RankResult} from "../models/RankResult";
 import {changeFormattedStatus} from "../utils/Formatter";
 
 const iconv = require('iconv-lite'),
-    request = require('request');
+    request = require('request-promise');
 
-export class NateParser {
+export default class NateParser {
 
     private static API_ENDPOINT = "http://www.nate.com/nate5/getlivekeyword";
 
-    public static getNateRank(onResponse) {
-
+    public static async getNateRank() {
 
         let rankResult: RankResult = {
             resultCode: 200,
@@ -23,18 +22,19 @@ export class NateParser {
             encoding: null
         };
 
-        request(requestOptions, (err, response, html)=> {
-            let encodedResponse = iconv.decode(html, 'UTF-8').toString();
-            let parsedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
-            for (let keyword of parsedResponse) {
-                rankResult.data.push({
-                    rank: keyword[0],
-                    title: keyword[1],
-                    status: changeFormattedStatus(keyword[2]),
-                    value: keyword[3]
-                });
-            }
-            onResponse(rankResult);
-        });
+        const response = await request(requestOptions);
+        let encodedResponse = iconv.decode(response, 'EUC-KR').toString();
+        let parsedResponse = JSON.parse(encodedResponse.replace(/';RSKS.Init\(\);/gi, '').replace(/var arrHotRecent='/gi, ''));
+
+        for (let keyword of parsedResponse) {
+            rankResult.data.push({
+                rank: keyword[0],
+                title: keyword[1],
+                status: changeFormattedStatus(keyword[2]),
+                value: keyword[3]
+            });
+        }
+
+        return rankResult;
     }
 }
