@@ -4,7 +4,7 @@ import {Rank} from "../models/Rank";
 import {changeFormattedStatus} from "../utils/Formatter";
 import {RankStatus} from "../models/RankStatus";
 
-const request = require('request'),
+const request = require('request-promise'),
     cheerio = require('cheerio');
 
 /**
@@ -12,9 +12,7 @@ const request = require('request'),
  */
 
 
-
-export class CommonParser {
-
+export default class CommonParser {
 
     private parserParam: ParserParam;
     private rankResult: RankResult;
@@ -23,19 +21,17 @@ export class CommonParser {
         this.parserParam = parserParam;
     }
 
-    public getRank(handleResult: Function) {
-        let self = this;
-        request(this.parserParam.url, function (err, res, html) {
-            if (!err) {
-                handleResult(self.handleRankData(html));
-            } else {
-                throw err;
-            }
-        });
+    public async getRank() {
+        try {
+            const response = await request.get(this.parserParam.url);
+            return this.handleRankData(response);
+        } catch (err) {
+            return err;
+        }
     }
 
     private handleRankData(html: string) {
-        let $:any = cheerio.load(html);
+        let $: any = cheerio.load(html);
 
         this.rankResult = {
             resultCode: 200,
@@ -47,7 +43,7 @@ export class CommonParser {
         let self = this;
         self.rankResult.data = [];
 
-        $(this.parserParam.querySelector).each(function (i: number, elem: any) {
+        $(this.parserParam.querySelector).each((i: number, elem: any) => {
             let resultData = self.parserParam.parserSelector($, elem);
             let rankData: Rank = {
                 rank: i + 1,
@@ -57,9 +53,11 @@ export class CommonParser {
             if (resultData.status) {
                 rankData.status = <RankStatus>changeFormattedStatus(resultData.status);
             }
+            if (!rankData.value) {
+                delete rankData.value;
+            }
             self.rankResult.data.push(rankData);
         });
-
         return this.rankResult;
     }
 }

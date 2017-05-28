@@ -1,6 +1,6 @@
 import {ParserParam} from "../ParserParam";
 
-export let paramDaum: ParserParam = {
+let parserParam  : ParserParam={
     type: 'daum',
     url: 'http://www.daum.net',
     querySelector: 'ol.list_hotissue > li .rank_cont:not([aria-hidden])',
@@ -14,3 +14,5 @@ export let paramDaum: ParserParam = {
         }
     }
 };
+
+export default parserParam;
