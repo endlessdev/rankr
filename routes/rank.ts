@@ -6,6 +6,8 @@ import CommonParser from "../utils/CommonParser";
 import NateParser from "../utils/NateParser";
 import paramNaver from "../models/params/NaverParam";
 import paramDaum from "../models/params/DaumParam";
+import {paramZum} from "../models/params/ZumParam";
+
 import async = Q.async;
 let parser = new CommonParser();
 
@@ -27,5 +29,9 @@ router.get('/nate', async (ctx, next) => {
     ctx.body = await NateParser.getNateRank()
 });
 
+router.get('/zum', async (ctx, next) => {
+    parser.setParam(paramZum);
+    ctx.body = await parser.getRank();
+});
 
 export default router;

@@ -8,7 +8,7 @@ import * as serve from 'koa-static'
 import * as path from 'path'
 
 import rank from './routes/rank';
-import crawler from './database/crawler'
+import {crawlJob} from './database/crawler'
 
 const app = new Koa();
 const port = process.env.PORT || 3000;
@@ -21,5 +21,5 @@ app
     .use(rank.routes())
     .use(serve(dist));
 
-crawler.crawlJob.start();
+crawlJob.start();
 app.listen(port, () => console.log(`Listening on PORT ${port}`));
