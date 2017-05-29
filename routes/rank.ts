@@ -34,4 +34,17 @@ router.get('/zum', async (ctx, next) => {
     ctx.body = await parser.getRank();
 });
 
+router.get('/all', async (ctx, next) => {
+    let response = {};
+    parser.setParam(paramNaver);
+    response['naver']= await parser.getRank();
+    parser.setParam(paramDaum);
+    response['daum']= await parser.getRank();
+    response['nate']= await NateParser.getNateRank();
+    parser.setParam(paramZum);
+    response['zum'] = await parser.getRank();
+
+    ctx.body = response;
+});
+
 export default router;
