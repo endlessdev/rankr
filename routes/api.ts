@@ -28,7 +28,7 @@ router.get('/recent', async (ctx, next) => {
     FROM   rank_zum_logs
     WHERE  ( rank_crawl_idx IN (SELECT idx
     FROM   rank_crawl_logs
-    WHERE  createdat >= Now() - INTERVAL 1 hour) )
+    WHERE  createdAt >= Now() - INTERVAL 1 hour) )
     GROUP  BY title
     ORDER  BY rank_avg ASC
     LIMIT
