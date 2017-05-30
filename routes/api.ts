@@ -16,17 +16,23 @@ router.get('/recent', async (ctx, next) => {
         Avg(rank)    AS rank_avg,
         Count(title) AS count
     FROM   rank_naver_logs
+    WHERE  ( rank_crawl_idx IN (SELECT idx
+    FROM   rank_crawl_logs
+    WHERE  createdAt >= Now() - INTERVAL 1 hour) )
     UNION
     SELECT title,
         Avg(rank)    AS rank_avg,
         Count(title) AS count
     FROM   rank_daum_logs
+    WHERE  ( rank_crawl_idx IN (SELECT idx
+    FROM   rank_crawl_logs
+    WHERE  createdAt >= Now() - INTERVAL 1 hour) )
     UNION
     SELECT title,
         Avg(rank)    AS rank_avg,
         Count(title) AS count
     FROM   rank_zum_logs
-    WHERE  ( rank_crawl_idx IN (SELECT idx           
+    WHERE  ( rank_crawl_idx IN (SELECT idx
     FROM   rank_crawl_logs
     WHERE  createdAt >= Now() - INTERVAL 1 hour) )
     GROUP  BY title
