@@ -37,12 +37,12 @@ router.get('/zum', async (ctx, next) => {
 router.get('/all', async (ctx, next) => {
     let response = {};
     parser.setParam(paramNaver);
-    response['naver']= await parser.getRank();
+    response['naver'] = (await parser.getRank()).data;
     parser.setParam(paramDaum);
-    response['daum']= await parser.getRank();
-    response['nate']= await NateParser.getNateRank();
+    response['daum'] = (await parser.getRank()).data;
+    response['nate'] = (await NateParser.getNateRank()).data;
     parser.setParam(paramZum);
-    response['zum'] = await parser.getRank();
+    response['zum'] = (await parser.getRank()).data;
 
     ctx.body = response;
 });
