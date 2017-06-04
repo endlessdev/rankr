@@ -2,6 +2,7 @@
 
 import * as Router from 'koa-router'
 import {sequelize, Sequelize} from "../database/index"
+import {RankType} from "../models/RankType"
 
 import async = Q.async;
 
@@ -68,7 +69,7 @@ LIMIT 10;
 router.get('/today', async (ctx, next) => {
 
     const RAW_QUERY = `
-  SELECT
+SELECT
   title,
   Avg(rank)    AS rank_avg,
   Count(title) AS count,
@@ -85,14 +86,14 @@ SELECT
   Avg(rank)    AS rank_avg,
   Count(title) AS count,
   rank_crawl_logs.*
-FROM rank_daum_logs
+  FROM rank_daum_logs
   LEFT JOIN rank_crawl_logs ON rank_crawl_idx = rank_crawl_logs.idx
   WHERE ((rank_crawl_idx IN (SELECT idx
                            FROM rank_crawl_logs
                            WHERE createdAt >= Now() - INTERVAL 1 DAY))) AND
       (createdAt >= Now() - INTERVAL 1 DAY)
-GROUP BY title
-ORDER BY createdAt DESC,
+  GROUP BY title
+  ORDER BY createdAt DESC,
   count DESC`;
 
     let result = [];
@@ -104,5 +105,35 @@ ORDER BY createdAt DESC,
 
 });
 
+router.get('/keyword/:keyword', async (ctx, next) => {
+
+  let response = {};
+  let ranks : Array<RankType> = ['naver', 'daum', 'zum'];
+
+  const searchKeyword = ctx.params.keyword;
+
+  for(let rank of ranks){
+    const RAW_QUERY = `
+  SELECT
+  rank_crawl_logs.createdAt,
+  rank_${rank}_logs.rank_crawl_idx,
+  rank_${rank}_logs.rank,
+  rank_${rank}_logs.title
+  FROM rank_crawl_logs 
+  LEFT JOIN rank_${rank}_logs ON rank_crawl_logs.idx = rank_${rank}_logs.rank_crawl_idx
+  WHERE createdAt >= Now() - INTERVAL 1 DAY AND
+      title = '${searchKeyword}'
+  ORDER BY createdAt ASC;`
+
+  await sequelize.query(RAW_QUERY).spread((results, metadata) => {
+        response[rank] = results;
+    });
+  }
+
+  console.log(response);
+
+  ctx.body = response;
+
+});
 
 export default router;
