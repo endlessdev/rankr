@@ -3,7 +3,6 @@
 import * as Router from 'koa-router'
 import {sequelize, Sequelize} from "../database/index"
 import {RankType} from "../models/RankType"
-
 import async = Q.async;
 
 const router = new Router({prefix: '/analytics'});

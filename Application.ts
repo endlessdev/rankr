@@ -9,7 +9,8 @@ import * as cors from 'koa-cors'
 import * as path from 'path'
 
 import rank from './routes/rank';
-import api from './routes/api';
+import news from './routes/news';
+import api from './routes/analytics';
 import {crawlJob} from './database/crawler'
 
 const app = new Koa();
@@ -23,6 +24,7 @@ app
     .use(cors())
     .use(rank.routes())
     .use(api.routes())
+    .use(news.routes())
     .use(serve(dist));
 
 crawlJob.start();
