@@ -120,7 +120,7 @@ router.get('/keyword/:keyword', async (ctx, next) => {
   rank_${rank}_logs.title
   FROM rank_crawl_logs 
   LEFT JOIN rank_${rank}_logs ON rank_crawl_logs.idx = rank_${rank}_logs.rank_crawl_idx
-  WHERE createdAt >= Now() - INTERVAL 1 DAY AND
+  WHERE createdAt >= Now() - INTERVAL 1 HOUR AND
       title = '${searchKeyword}'
   ORDER BY createdAt ASC;`
 
