@@ -1,14 +1,14 @@
-import CommonParser from "../utils/CommonParser"
-import NateParser from "../utils/NateParser"
-import paramDaum from "../models/params/DaumParam"
-import paramNaver from "../models/params/NaverParam"
+import CommonParser from "../utils/common-parser"
+import NateParser from "../utils/nate-parser"
+import paramDaum from "../models/params/daum-param"
+import paramNaver from "../models/params/naver-param"
 import {sequelize, Sequelize} from "../database/index";
-import * as RankLogNaver from "../database/models/RankLogNaver"
-import * as RankLogZum from "../database/models/RankLogZum"
-import * as RankLogNate from "../database/models/RankLogNate"
-import * as RankLogDaum from "../database/models/RankLogDaum"
-import * as RankCrawlLog from "../database/models/RankCrawlLog"
-import {paramZum} from "../models/params/ZumParam";
+import * as RankLogNaver from "./models/rank-log-naver"
+import * as RankLogZum from "./models/rank-log-zum"
+import * as RankLogNate from "./models/rank-log-nate"
+import * as RankLogDaum from "./models/rank-log-daum"
+import * as RankCrawlLog from "./models/rank-crawl-log"
+import {paramZum} from "../models/params/zum-param";
 
 const CronJob = require('cron').CronJob,
     commonParser: CommonParser = new CommonParser();

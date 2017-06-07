@@ -1,5 +1,5 @@
-import {RankResult} from "../models/RankResult";
-import {changeFormattedStatus} from "../utils/Formatter";
+import {RankResult} from "../models/rank-result";
+import {changeFormattedStatus} from "./formatter";
 
 const iconv = require('iconv-lite'),
     request = require('request-promise');

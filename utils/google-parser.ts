@@ -1,4 +1,4 @@
-import {RankResult} from "../models/RankResult";
+import {RankResult} from "../models/rank-result";
 
 const Iconv = require('iconv').Iconv;
 const iconv = new Iconv('euc-kr', 'utf-8'),

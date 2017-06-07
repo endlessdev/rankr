@@ -1,4 +1,4 @@
-import {ParserParam} from "../ParserParam";
+import {ParserParam} from "../parser-param";
 
 export let paramZum: ParserParam = {
     type: "zum",

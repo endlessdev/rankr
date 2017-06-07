@@ -1,8 +1,8 @@
-import {ParserParam} from "../models/ParserParam";
-import {RankResult} from "../models/RankResult";
-import {Rank} from "../models/Rank";
-import {changeFormattedStatus} from "../utils/Formatter";
-import {RankStatus} from "../models/RankStatus";
+import {ParserParam} from "../models/parser-param";
+import {RankResult} from "../models/rank-result";
+import {Rank} from "../models/rank";
+import {changeFormattedStatus} from "./formatter";
+import {RankStatus} from "../models/rank-status";
 
 const request = require('request-promise'),
     cheerio = require('cheerio');

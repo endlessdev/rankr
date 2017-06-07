@@ -1,4 +1,4 @@
-import {RankType} from "./RankType";
+import {RankType} from "./rank-type";
 /**
  * Created by jade on 29/04/2017.
  */

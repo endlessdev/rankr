@@ -2,11 +2,11 @@
 
 import * as Router from 'koa-router'
 
-import CommonParser from "../utils/CommonParser";
-import NateParser from "../utils/NateParser";
-import paramNaver from "../models/params/NaverParam";
-import paramDaum from "../models/params/DaumParam";
-import {paramZum} from "../models/params/ZumParam";
+import CommonParser from "../utils/common-parser";
+import NateParser from "../utils/nate-parser";
+import paramNaver from "../models/params/naver-param";
+import paramDaum from "../models/params/daum-param";
+import {paramZum} from "../models/params/zum-param";
 
 import async = Q.async;
 let parser = new CommonParser();
