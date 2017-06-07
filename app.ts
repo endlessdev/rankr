@@ -27,5 +27,7 @@ app
     .use(news.routes())
     .use(serve(dist));
 
-// crawlJob.start();
+if (process.argv[2] == '--with-crawler'){
+    crawlJob.start();
+}
 app.listen(port, () => console.log(`Listening on PORT ${port}`));

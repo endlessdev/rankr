@@ -2,6 +2,7 @@
   "name": "rankr",
   "scripts": {
     "start": "ts-node ./app.ts",
+    "start-with-crawler": "ts-node ./app.ts --with-crawler",
     "dev": "webpack --watch",
     "build": "webpack"
   },
