@@ -1,7 +1,7 @@
 {
   "name": "rankr",
   "scripts": {
-    "start": "ts-node ./Application.ts",
+    "start": "ts-node ./app.ts",
     "dev": "webpack --watch",
     "build": "webpack"
   },
