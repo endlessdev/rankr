@@ -1,6 +1,6 @@
 <p align="center">
     <img width="350" src='https://cdn.rawgit.com/endlessdev/rankr/master/rankr.svg'/><br>
-    <b><p>대한민국 포털사이트 검색어 기반<br>실시간 통합정보분석 서비스</p></b><br><br>
+    <b><span>대한민국 포털사이트 검색어 기반<br>실시간 통합정보분석 서비스</span></b><br><br>
     <a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
     <a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/travis/endlessdev/rankr.svg?branch=master&style=flat-square"></a>
 </p>
@@ -31,65 +31,198 @@ $ sequelize db:migrate --env [database env]
 
 ### 서비스 실행
 
-`TypeScript` 로 작성된 서비스 애플리케이션이 `ts-node`를 통하여 별도의 트랜스 컴파일링 없이 실행됩니다.<br>
+`TypeScript` 언어로 작성된 서비스 애플리케이션이 `ts-node`를 통하여 별도의 트랜스 컴파일링 없이 실행됩니다.<br>
 별다른 옵션이 없다면, REST API 서버와 크롤러가 동시에 실행됩니다.
 <pre>
 $ npm start
 </pre>
 
 
-## API Overview
+## Rankr REST API
 
-**Naver realtime rank**
+각 포털사이트의 인기검색어를 기반한 가공데이터를 REST API 형식으로 제공됩니다.<br>
+해당 API를 사용하기 위해서 아래의 본 서버의 API를 이용해주세요.
 
- - ```GET``` /rank/naver 
+<pre>
+https://api.rankr.narin.us
+</pre>
 
-**Daum realtime rank**
-
- - ```GET``` /rank/daum
-
-**Nate realtime rank**
-
- - ```GET``` /rank/nate
- 
-### Response JSON Example
-
-```json
+## RANK API (prefix : /rank)
+각 포털사이트의 실시간 급상승 검색어를 응답받을 수 있습니다.
+### `GET(/naver)` Naver 실시간 급상승 검색어
+네이버의 실시간 급상승 검색어를 PC 웹페이지에서 HTML파싱을 거쳐 응답합니다.
+#### Example Response 
+```JSON
 {
-  "resultCode": 200,
-  "rankType": "daum",
-  "requestDate": "2017-04-30T12:37:15.554Z",
-  "data": [
+"resultCode": 200,
+"rankType": "naver",
+"requestDate": "2017-06-05T13:04:50.186Z",
+"data": [
     {
       "rank": 1,
-      "value": "481",
-      "title": "신동엽",
-      "status": "up"
+      "title": "제보자들"
     },
-    ...
+  ...
   ]
 }
 ```
 
-## Crawler
+> 해당 포털사이트에서 급상승 트래킹 서비스를 시작하여 변동사항 파라미터 (e.g status, value)가 제외되었습니다. 이용하실때 참고하시길 바랍니다.
 
-Crawler stores Rank data in the database every time it runs.
+### `GET(/daum)` Daum 실시간 급상승 검색어
+다음의 실시간 급상승 검색어를 PC 웹페이지에서 HTML파싱을 거쳐 응답합니다.
+#### Example Response 
+```JSON
+{
+"resultCode": 200,
+"rankType": "daum",
+"requestDate": "2017-06-05T13:04:50.186Z",
+"data": [
+    {
+      "rank": 1,
+      "title": "제보자들",
+      "value": "244",
+      "status": "up"
+    },
+  ...
+  ]
+}
+```
+### `GET(/nate)` Nate 실시간 급상승 검색어
+네이트의 실시간 급상승 검색어를 PC 웹페이지에서 HTML파싱을 거쳐 응답합니다.
+#### Example Response 
+```JSON
+{
+"resultCode": 200,
+"rankType": "nate",
+"requestDate": "2017-06-05T13:04:50.186Z",
+"data": [
+    {
+      "rank": 1,
+      "title": "제보자들",
+      "value": "244",
+      "status": "up"
+    },
+  ...
+  ]
+}
+```
+> 해당 포털사이트는 Daum의 검색엔진과 실시간 급상승 검색어를 사용하기 때문에 곧 Deprecate 될 예정입니다.
 
-### Database
+### `GET(/zum)` Zum 실시간 급상승 검색어
+Zum의 실시간 급상승 검색어를 PC 웹페이지에서 HTML파싱을 거쳐 응답합니다.
+#### Example Response 
+```JSON
+{
+"resultCode": 200,
+"rankType": "zum",
+"requestDate": "2017-06-05T13:04:50.186Z",
+"data": [
+    {
+      "rank": 1,
+      "title": "제보자들"
+    },
+  ...
+  ]
+}
+```
+## Analytics API (prefix : /analytics)
+각 포털사이트의 실시간 급상승 검색어의 크롤링 데이터에 기반한 분석결과를 받아볼 수 있습니다.
 
-Using Sequelize for ORM
+### `GET(/recent)` 최근 1시간 평균 통계
+크롤링이 진행되는 모든 포털사이트의 급상승 인기검색어를 기반으로 최근 1시간 이내의 키워드 중 누적 진입수와 평균 순위를 바탕으로 정렬하여 상위 10개의 데이터를 반환합니다.
 
-### Running
-It automatically run when started Application
+#### Example Response 
+```JSON
+[
+ {
+    "title": "현충일",
+    "rank_count": 3911,
+    "rank_avg": 7.2646
+ },
+...
+]
+```
 
-## Milestone
+### `GET(/recent)` 최근 24시간 평균 통계
+크롤링이 진행되는 모든 포털사이트의 급상승 인기검색어를 기반으로 최근 24시간 이내의 키워드 중 누적 진입수와 평균 순위를 바탕으로 정렬하여 전체 데이터를 반환합니다.
 
- - [ ] Google Trend Parsing
- - [ ] Visuallizer web page
- - [ ] Parse and crawl news contents
- - [ ] Do stuff with Neural network (Please suggest to me)
+#### Example Response 
+```JSON
+[
+ {
+    "title": "현충일",
+    "rank_count": 3911,
+    "rank_avg": 7.2646
+ },
+...
+]
+```
 
-## License
+### `GET(/search/:keyword)` 특정 키워드 분석
 
-Follow the  **MIT LICENCE**
+각 포털사이트의 실시간 급상승 검색어의 크롤링 데이터에 기반하여 특정 키워드의 분석결과를 받아볼 수 있습니다.
+#### Example Response 
+```JSON
+{
+  "naver": [{
+    "createdAt": "2017-06-04T13:23:00.000Z",
+    "rank_crawl_idx": 46100,
+    "rank": 2,
+    "title": "가인"
+  },
+  ...
+  "daum" : [...],
+  "zum" : [...]
+}
+```
+
+## News API (prefix : /news)
+
+### `GET(/search/:keyword)` 특정 키워드로 검색된 뉴스 파싱
+
+네이버 통합 뉴스 RSS를 이용하여 특정 키워드로 검색된 뉴스의 데이터를 반환합니다.
+
+#### Example Response 
+```JSON
+[
+  {
+    "title": "주지훈, \"사랑할 시간도 아까운데 화낼 시간이 어디있냐\"...대마초 권유 폭로해도?",
+    "link": "http://www.ujnews.co.kr/news/articleView.html?idxno=267173",
+    "description": "사진=방송캡쳐 주지훈, \"사랑할 시간도 아까운데 화낼 시간이 어디있냐\"...대마초 권유 폭로해도 그럴까 가수 가인이 주지훈의 지인에게 대마초를 권유 받은 사실을 폭로해 논란이 된 가운데 과거 연인 가인에 대한 주지훈의...",
+    "pubDate": "in 9 hours",
+    "author": "울산종합일보",
+    "category": "섹션없음",
+    "thumb": "http://imgnews.naver.net/image/thumb/5354/2017/06/05/27019.jpg"
+  },
+  ...
+]
+```
+
+
+## 크롤러
+
+크롤러는 본 서비스가 지원하는 각각의 포털사이트를 **1분에 한번씩 접속**하여 실시간 급상승 검색어를 사용자가 지정한 데이터베이스에 저장합니다.
+
+
+### 데이터베이스
+
+데이터베이스의 원활한 관리 및 활용을 위하여 `Sequelize` ORM을 사용하여 개발하도록 작성되었습니다.<br>
+앞으로 데이터베이스의 추가나 수정은 마이그레이션 및 모델을 수정하여 사용합니다.
+
+#### 데이터베이스 구조
+
+![데이터베이스 구조](http://i.imgur.com/N1hCUp7.png)
+
+## 마일스톤
+
+ - [ ] 구글 트렌드 데이터 가공
+ - [x] 시각화 웹 페이지 (현재 개발중)
+ - [x] 뉴스 콘텐츠 파싱 및 크롤링
+ - [ ] 뉴럴네트워크 구축 및 서비스 활용
+ - [ ] 글로벌 화 (중국, 일본)
+
+## 라이센스
+
+본 프로젝트는 BSD 라이센스(Berkeley Software Distribution(BSD) License)를 따릅니다.
 
