@@ -32,9 +32,15 @@ $ sequelize db:migrate --env [database env]
 ### 서비스 실행
 
 `TypeScript` 언어로 작성된 서비스 애플리케이션이 `ts-node`를 통하여 별도의 트랜스 컴파일링 없이 실행됩니다.<br>
-별다른 옵션이 없다면, REST API 서버와 크롤러가 동시에 실행됩니다.
+
 <pre>
 $ npm start
+</pre>
+
+크롤러와 같이 실행하고 싶다면, 아래와 같이 실행해주세요.
+
+<pre>
+$ npm run start-with-crawler
 </pre>
 
 
