@@ -5,7 +5,7 @@ import {sequelize, Sequelize} from "../database/index"
 import {RankType} from "../models/rank-type"
 import async = Q.async;
 
-const router = new Router({prefix: '/analytics'});
+const router = new Router({prefix: '/v1/analytics'});
 
 /* GET home page. */
 
