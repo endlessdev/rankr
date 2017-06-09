@@ -8,7 +8,7 @@ import * as timezone from 'moment-timezone'
 
 import async = Q.async;
 
-const router = new Router({prefix: '/news'});
+const router = new Router({prefix: '/v1/news'});
 
 timezone().tz("Asia/Seoul").format();
 

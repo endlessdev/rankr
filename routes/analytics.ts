@@ -9,7 +9,7 @@ const router = new Router({prefix: '/analytics'});
 
 /* GET home page. */
 
-router.get('/recent', async (ctx, next) => {
+router.get('/v1/recent', async (ctx, next) => {
 
     const RAW_QUERY =
         `

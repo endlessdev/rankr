@@ -10,7 +10,7 @@ import * as path from 'path'
 
 import rank from './routes/rank';
 import news from './routes/news';
-import api from './routes/analytics';
+import analytics from './routes/analytics';
 import {crawlJob} from './database/crawler'
 
 const app = new Koa();
@@ -23,7 +23,7 @@ app
     .use(bodyParser(bpOption))
     .use(cors())
     .use(rank.routes())
-    .use(api.routes())
+    .use(analytics.routes())
     .use(news.routes())
     .use(serve(dist));
 

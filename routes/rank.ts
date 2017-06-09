@@ -11,7 +11,7 @@ import {paramZum} from "../models/params/zum-param";
 import async = Q.async;
 let parser = new CommonParser();
 
-const router = new Router({prefix: '/rank'});
+const router = new Router({prefix: '/v1/rank'});
 
 /* GET home page. */
 
