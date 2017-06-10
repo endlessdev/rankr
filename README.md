@@ -2,7 +2,7 @@
     <img width="350" src='https://cdn.rawgit.com/endlessdev/rankr/master/rankr.svg'/><br>
     <b><span>대한민국 포털사이트 검색어 기반<br>실시간 통합정보분석 서비스</span></b><br><br>
     <a><img src="https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square"></a>
-    <a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/travis/endlessdev/rankr.svg?branch=master&style=flat-square"></a>
+    <a href="https://travis-ci.org/endlessdev/rankr"><img src="https://img.shields.io/circleci/project/github/endlessdev/rankr.svg?style=flat-square"></a>
 </p>
 
 ## 시작하기
