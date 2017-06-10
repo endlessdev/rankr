@@ -1,18 +1,18 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
-import * as Router from 'koa-router'
-import {sequelize, Sequelize} from "../database/index"
-import {RankType} from "../models/rank-type"
+import * as Router from 'koa-router';
+import { sequelize, Sequelize } from '../database/index';
+import { RankType } from '../models/rank-type';
 import async = Q.async;
 
-const router = new Router({prefix: '/v1/analytics'});
+const router = new Router({ prefix: '/v1/analytics' });
 
 /* GET home page. */
 
 router.get('/recent', async (ctx, next) => {
 
-    const RAW_QUERY =
-        `
+  const RAW_QUERY =
+    `
         SELECT
   title,
   count(title) AS rank_count,
@@ -54,20 +54,20 @@ ORDER BY rank_count DESC
 LIMIT 10;
         `;
 
-    let result = [];
-    await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
-        console.log(result);
-        console.log(metadata);
-        result = results;
-    });
+  let result = [];
+  await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
+    console.log(result);
+    console.log(metadata);
+    result = results;
+  });
 
-    ctx.body = result;
+  ctx.body = result;
 
 });
 
 router.get('/today', async (ctx, next) => {
 
-    const RAW_QUERY = `
+  const RAW_QUERY = `
 SELECT
   title,
   Avg(rank)    AS rank_avg,
@@ -95,23 +95,23 @@ SELECT
   ORDER BY createdAt DESC,
   count DESC`;
 
-    let result = [];
-    await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
-        result = results;
-    });
+  let result = [];
+  await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
+    result = results;
+  });
 
-    ctx.body = result;
+  ctx.body = result;
 
 });
 
 router.get('/keyword/:keyword', async (ctx, next) => {
 
-  let response = {};
-  let ranks : Array<RankType> = ['naver', 'daum', 'zum'];
+  const response = {};
+  const ranks: Array<RankType> = ['naver', 'daum', 'zum'];
 
   const searchKeyword = ctx.params.keyword;
 
-  for(let rank of ranks){
+  for (const rank of ranks) {
     const RAW_QUERY = `
   SELECT
   rank_crawl_logs.createdAt,
@@ -122,10 +122,12 @@ router.get('/keyword/:keyword', async (ctx, next) => {
   LEFT JOIN rank_${rank}_logs ON rank_crawl_logs.idx = rank_${rank}_logs.rank_crawl_idx
   WHERE createdAt >= Now() - INTERVAL 1 HOUR AND
       REPLACE(title, ' ', '') = REPLACE('${searchKeyword}', ' ', '')
-  ORDER BY createdAt ASC;`
+  GROUP BY createdAt
+  ORDER BY createdAt ASC;`;
 
-  await sequelize.query(RAW_QUERY).spread((results, metadata) => {
-        response[rank] = results;
+    await sequelize.query(RAW_QUERY).spread((results, metadata) => {
+      response[rank] = results;
+      console.log(results);
     });
   }
 

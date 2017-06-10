@@ -1,1 +1,1 @@
-export type RankStatus = "up" | "down" | "new"
+export type RankStatus = 'up' | 'down' | 'new' ;
