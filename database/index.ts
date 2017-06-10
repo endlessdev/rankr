@@ -15,8 +15,8 @@ const connectWithRetry = () => {
     .then(() => {
       console.log('Connection has been established successfully.');
     })
-    .catch(err => {
-      console.log('Failed to connect to database on startup - retrying in 5 sec', err);
+    .catch((err) => {
+      console.log('Failed to connect to database on startup - retrying in 5 sec', (err));
       setTimeout(connectWithRetry, 5000);
     });
 };

@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
 import * as Router from 'koa-router';
-import { sequelize, Sequelize } from '../database/index';
+import { sequelize } from '../database/index';
 import { RankType } from '../models/rank-type';
 import async = Q.async;
 
@@ -107,7 +107,7 @@ SELECT
 router.get('/keyword/:keyword', async (ctx, next) => {
 
   const response = {};
-  const ranks: Array<RankType> = ['naver', 'daum', 'zum'];
+  const ranks: RankType[] = ['naver', 'daum', 'zum'];
 
   const searchKeyword = ctx.params.keyword;
 
