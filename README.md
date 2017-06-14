@@ -50,7 +50,7 @@ $ npm run start-with-crawler
 해당 API를 사용하기 위해서 아래의 본 서버의 API를 이용해주세요.
 
 <pre>
-https://api.rankr.narin.us
+https://api.rankr.narin.us/v1
 </pre>
 
 ## RANK API (prefix : /rank)
