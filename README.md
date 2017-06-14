@@ -220,6 +220,13 @@ Zum의 실시간 급상승 검색어를 PC 웹페이지에서 HTML파싱을 거�
 
 ![데이터베이스 구조](http://i.imgur.com/N1hCUp7.png)
 
+## [시각화 웹 페이지](http://rankr.narin.us)
+
+[**Narin(@narincorp)**](https://github.com/narincorp) 에서 공식적으로 진행되고있는 시각화 웹페이지 개발 프로젝트를 확인해주세요.<br>
+`Vue.js`와 `TypeScript` 를 사용하여 개발하고 있습니다.
+
+[Go to Github Repository](https://github.com/narincorp/rankr-vue)
+
 ## 마일스톤
 
  - [ ] 구글 트렌드 데이터 가공
