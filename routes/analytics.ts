@@ -1,13 +1,11 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
 import * as Router from 'koa-router';
-import { sequelize } from '../database/index';
+import {sequelize, Sequelize} from '../database/index';
 import { RankType } from '../models/rank-type';
 import async = Q.async;
 
 const router = new Router({ prefix: '/v1/analytics' });
-
-/* GET home page. */
 
 router.get('/recent', async (ctx, next) => {
 
@@ -109,7 +107,7 @@ router.get('/keyword/:keyword', async (ctx, next) => {
   const response = {};
   const ranks: RankType[] = ['naver', 'daum', 'zum'];
 
-  const searchKeyword = ctx.params.keyword;
+  const searchKeyword = Sequelize.escape(ctx.params.keyword);
 
   for (const rank of ranks) {
     const RAW_QUERY = `
