@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
 import * as Router from 'koa-router';
-import {sequelize, Sequelize} from '../database/index';
+import { sequelize, Sequelize } from '../database/index';
 import { RankType } from '../models/rank-type';
 import async = Q.async;
 
@@ -10,8 +10,7 @@ const router = new Router({ prefix: '/v1/analytics' });
 router.get('/recent', async (ctx, next) => {
 
   const RAW_QUERY =
-    `
-        SELECT
+    `SELECT
   title,
   count(title) AS rank_count,
   avg(rank) as rank_avg
@@ -49,8 +48,7 @@ FROM ((SELECT
              (createdAt >= Now() - INTERVAL 1 DAY))) AS asdf
 GROUP BY title
 ORDER BY rank_count DESC
-LIMIT 10;
-        `;
+LIMIT 10;`;
 
   let result = [];
   await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
@@ -107,7 +105,7 @@ router.get('/keyword/:keyword', async (ctx, next) => {
   const response = {};
   const ranks: RankType[] = ['naver', 'daum', 'zum'];
 
-  const searchKeyword = Sequelize.escape(ctx.params.keyword);
+  const searchKeyword = sequelize.escape(ctx.params.keyword);
 
   for (const rank of ranks) {
     const RAW_QUERY = `
