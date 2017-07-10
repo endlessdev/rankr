@@ -13,14 +13,24 @@ import * as cheerio from 'cheerio';
 
 export default class CommonParser {
 
+  private static instance: CommonParser;
+
   private parserParam: ParserParam;
   private rankResult: RankResult;
 
-  public setParam(parserParam: ParserParam) {
+  constructor() {
+
+  }
+
+  public static get Instance() {
+    return this.instance || (this.instance = new this());
+  }
+
+  set param(parserParam: ParserParam) {
     this.parserParam = parserParam;
   }
 
-  public async getRank() {
+  async getRank() {
     try {
       const response = await request.get(this.parserParam.url);
       return this.handleRankData(response);
@@ -39,11 +49,10 @@ export default class CommonParser {
       data: [],
     };
 
-    const self = this;
-    self.rankResult.data = [];
+    this.rankResult.data = [];
 
     $(this.parserParam.querySelector).each((i: number, elem: any) => {
-      const resultData = self.parserParam.parserSelector($, elem);
+      const resultData = this.parserParam.parserSelector($, elem);
       const rankData: Rank = {
         rank: i + 1,
         value: resultData.value,
@@ -55,8 +64,10 @@ export default class CommonParser {
       if (!rankData.value) {
         delete rankData.value;
       }
-      self.rankResult.data.push(rankData);
+      this.rankResult.data.push(rankData);
     });
     return this.rankResult;
   }
+
+
 }
