@@ -23,4 +23,7 @@ export let model = sequelize.define('rank_crawl_news', {
     },
     onDelete: 'CASCADE',
   },
+}, {
+  timestamps: true,
+  deletedAt: false,
 });

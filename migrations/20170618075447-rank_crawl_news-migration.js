@@ -16,13 +16,6 @@ module.exports = {
                 primaryKey: true,
                 autoIncrement: true
             },
-            keyword: {
-                type: Sequelize.STRING,
-            },
-            url: {
-                type: Sequelize.STRING,
-                unique: true
-            },
             rank_crawl_idx: {
                 type: Sequelize.INTEGER,
                 references: {
@@ -30,7 +23,24 @@ module.exports = {
                     key: "idx"
                 },
                 onDelete: "CASCADE"
+            },
+            keyword: {
+                type: Sequelize.STRING,
+            },
+            url: {
+                type: Sequelize.STRING,
+                unique: true
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+            },
+            updatedAt: {
+                type: Sequelize.DATE(),
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()'),
             }
+        }, {
+            timestamps: true,
         })
     },
 
