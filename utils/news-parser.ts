@@ -19,6 +19,10 @@ export default class NewsParser {
             newsData[index][element] = newsData[index][element][0];
           }
         }
+        if (news['media:thumbnail']) {
+          newsData[index].thumb = news['media:thumbnail'].$.url.replace(/thumb140/gi, 'thumb');
+          delete newsData[index]['media:thumbnail'];
+        }
         newsData[index].pubDate = moment(newsData[index].pubDate).fromNow();
       });
     });
