@@ -16,7 +16,7 @@ const CronJob = require('cron').CronJob;
 const parserInstance = commonParser.Instance;
 
 export const crawlJob = new CronJob({
-  cronTime: '* * * * * *',
+  cronTime: '0,30 * * * * *',
   timeZone: process.env.CRON_TIMEZONE,
   onTick: async () => {
     await sequelize.sync().then(() => {
@@ -30,12 +30,20 @@ export const crawlJob = new CronJob({
         const rankHandler = (rank) => {
           newsParser.getNewsDataByKeyword(rank.title).then((newsData) => {
             for (const news of newsData) {
-              RankCrawlNews.model.create({
-                keyword: rank.title,
-                rank_crawl_idx: plainCrawlLog.idx,
-                url: news.link,
-              }).catch(() => {
-                console.log(`Already exist in database - ${news.link}`);
+              RankCrawlNews.model.count({
+                where: {
+                  url: news.link,
+                },
+              }).then((count) => {
+                if (count === 0) {
+                  RankCrawlNews.model.create({
+                    keyword: rank.title,
+                    rank_crawl_idx: plainCrawlLog.idx,
+                    url: news.link,
+                  }).catch(() => {
+                    console.log(`Already exist in database - ${news.link}`);
+                  });
+                }
               });
             }
           }).catch((err) => {
