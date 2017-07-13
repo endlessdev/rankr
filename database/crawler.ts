@@ -31,9 +31,11 @@ export const crawlJob = new CronJob({
           newsParser.getNewsDataByKeyword(rank.title).then((newsData) => {
             for (const news of newsData) {
               RankCrawlNews.model.create({
-                keyword : rank.title,
+                keyword: rank.title,
                 rank_crawl_idx: plainCrawlLog.idx,
-                url : news.link,
+                url: news.link,
+              }).catch(() => {
+                console.log(`Already exist in database - ${news.link}`);
               });
             }
           }).catch((err) => {
