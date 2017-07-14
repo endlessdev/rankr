@@ -1,18 +1,22 @@
 {
   "name": "rankr",
   "scripts": {
-    "start": "ts-node ./app.ts",
-    "start-with-crawler": "ts-node ./app.ts --with-crawler",
-    "dev": "webpack --watch",
-    "build": "webpack"
+    "start": "ts-node ./app.ts --no-cache",
+    "start-with-crawler": "ts-node ./app.ts --with-crawler"
   },
-  "version": "0.0.0",
-  "description": "",
-  "license": "",
-  "repository": "",
-  "author": "",
+  "version": "0.0.3",
+  "description": "Realtime integrated information analysis service",
+  "license": "MIT",
+  "repository": "https://github.com/endlessdev/rankr",
+  "author": "Jade Yeom",
   "keywords": [
-    ""
+    "realtime-rank",
+    "realtime",
+    "crawler",
+    "sequelize",
+    "database",
+    "parse",
+    "portal-site"
   ],
   "dependencies": {
     "@types/node": "^7.0.5",
@@ -29,6 +33,7 @@
     "koa-logger": "^3.0.0",
     "koa-router": "^7.2.0",
     "koa-static": "^3.0.0",
+    "koa2-cors": "^2.0.3",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "morgan": "~1.6.1",

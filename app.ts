@@ -4,7 +4,7 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 import * as serve from 'koa-static';
-import * as cors from 'koa-cors';
+import * as cors from 'koa2-cors';
 
 import * as path from 'path';
 
