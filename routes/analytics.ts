@@ -117,7 +117,7 @@ router.get('/keyword/:keyword', async (ctx, next) => {
   FROM rank_crawl_logs 
   LEFT JOIN rank_${rank}_logs ON rank_crawl_logs.idx = rank_${rank}_logs.rank_crawl_idx
   WHERE createdAt >= Now() - INTERVAL 1 HOUR AND
-      REPLACE(title, ' ', '') = REPLACE('${searchKeyword}', ' ', '')
+      REPLACE(title, ' ', '') = REPLACE(${searchKeyword}, ' ', '')
   GROUP BY createdAt
   ORDER BY createdAt ASC;`;
 
