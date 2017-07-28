@@ -1,15 +1,11 @@
-FROM nodesource/node:4.0
+FROM node:7
 
-RUN npm install -g tsd
-RUN npm install -g gulp-cli
-ADD package.json package.json
-ADD tsd.json tsd.json
+WORKDIR /usr/src/app
+
+COPY package.json .
 RUN npm install
-RUN tsd install
 
-ADD . .
-RUN gulp ts
+COPY . .
+EXPOSE 3000
 
-EXPOSE 3000 
-
-CMD ["node", "bin/www"]
+CMD npm run start-with-crawler
