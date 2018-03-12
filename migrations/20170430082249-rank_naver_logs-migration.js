@@ -31,6 +31,7 @@ module.exports = {
       }
     }, {
       timestamps: false,
+      charset: 'utf8',
     });
   },
 
