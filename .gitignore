@@ -72,3 +72,4 @@ yarn.lock
 
 /routes/**/*.js
 /routes/**/*.map
+env\.yaml
