@@ -27,12 +27,13 @@ export const crawlJob = new CronJob({
 
         const naverResult = await parserInstance.getRank();
 
-        const rankHandler = (rank) => {
-          newsParser.getNewsDataByKeyword(rank.title).then((newsData) => {
-            for (const news of newsData) {
+        const rankHandler = async (rank) => {
+          for (var i = 1; i < 5; i++){
+            let newsList = await newsParser.getNewsDataByKeywordByNaver(rank.title, i == 1 ? 1 : i*10 + 1);
+            for (let news of newsList) {
               RankCrawlNews.model.count({
                 where: {
-                  url: news.link,
+                  url: news.link
                 },
               }).then((count) => {
                 if (count === 0) {
@@ -40,15 +41,16 @@ export const crawlJob = new CronJob({
                     keyword: rank.title,
                     rank_crawl_idx: plainCrawlLog.idx,
                     url: news.link,
+                    title: news.title,
+                    content: news.content,
+                    press: news.press
                   }).catch(() => {
                     console.log(`Already exist in database - ${news.link}`);
                   });
                 }
               });
             }
-          }).catch((err) => {
-            console.error(err);
-          });
+          }
         };
 
         for (const rank of naverResult.data) {
@@ -59,7 +61,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-          rankHandler(rank);
+           rankHandler(rank);
         }
 
         parserInstance.param = daumParam;
@@ -74,7 +76,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-          rankHandler(rank);
+           rankHandler(rank);
         }
         parserInstance.param = paramZum;
         const zumResult = await parserInstance.getRank();
@@ -86,7 +88,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-          rankHandler(rank);
+           rankHandler(rank);
         }
         const nateResult = await nateParser.getNateRank();
         for (const rank of nateResult.data) {
@@ -99,7 +101,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-          rankHandler(rank);
+           rankHandler(rank);
         }
       });
     });

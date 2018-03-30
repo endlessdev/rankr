@@ -31,6 +31,15 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
+      title: {
+        type: Sequelize.STRING
+      },
+      press: {
+        type: Sequelize.STRING
+      },
+      content: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

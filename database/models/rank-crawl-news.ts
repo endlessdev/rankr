@@ -13,7 +13,15 @@ export let model = sequelize.define('rank_crawl_news', {
   },
   url: {
     type: Sequelize.STRING,
-    unique: true,
+  },
+  title: {
+    type: Sequelize.STRING,
+  },
+  content: {
+    type: Sequelize.STRING
+  },
+  press : {
+    type: Sequelize.STRING
   },
   rank_crawl_idx: {
     type: Sequelize.INTEGER,
