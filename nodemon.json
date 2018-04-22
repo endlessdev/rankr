@@ -1,0 +1,5 @@
+{
+  "watch": ["database", "migrations", "models", "routes", "utils", "config"],
+  "ext": "ts",
+  "exec": "ts-node ./app.ts --with-crawler"
+}
