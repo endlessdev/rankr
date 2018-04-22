@@ -26,7 +26,7 @@ export default class DaumParser{
       title: newsTitle,
       content: newsContent.html(),
       plain_text: newsContent.text(),
-      press: $('.info_cp .thumb_g, #pressLogo img').attr('alt'),
+      press: $('.info_cp .thumb_g').attr('alt') || $('.info_cp').text().trim(),
       link: url,
     };
   };
