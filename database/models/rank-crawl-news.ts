@@ -18,10 +18,13 @@ export let model = sequelize.define('rank_crawl_news', {
     type: Sequelize.STRING,
   },
   content: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
   },
   press : {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+  },
+  plain_text: {
+    type: Sequelize.STRING,
   },
   rank_crawl_idx: {
     type: Sequelize.INTEGER,

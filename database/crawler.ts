@@ -7,13 +7,17 @@ import * as RankLogNate from './models/rank-log-nate';
 import * as RankLogDaum from './models/rank-log-daum';
 import * as RankCrawlLog from './models/rank-crawl-log';
 import * as RankCrawlNews from './models/rank-crawl-news';
-import { paramZum } from '../models/params/zum-param';
+import {paramZum} from '../models/params/zum-param';
 import nateParser from '../utils/nate-parser';
-import newsParser  from '../utils/news-parser';
+import naverParser from '../parsers/naver-parser';
 import commonParser from '../utils/common-parser';
+import DaumParser from '../parsers/daum-parser';
+
 
 const CronJob = require('cron').CronJob;
 const parserInstance = commonParser.Instance;
+
+const daumParser = new DaumParser();
 
 export const crawlJob = new CronJob({
   cronTime: '0,30 * * * * *',
@@ -22,18 +26,18 @@ export const crawlJob = new CronJob({
     await sequelize.sync().then(() => {
       return RankCrawlLog.model.create({}).then(async (crawlLog) => {
 
-        const plainCrawlLog = crawlLog.get({ plain: true });
+        const plainCrawlLog = crawlLog.get({plain: true});
         parserInstance.param = naverParam;
 
         const naverResult = await parserInstance.getRank();
 
         const rankHandler = async (rank) => {
-          for (var i = 1; i < 5; i++){
-            let newsList = await newsParser.getNewsDataByKeywordByNaver(rank.title, i == 1 ? 1 : i*10 + 1);
-            for (let news of newsList) {
+          for (let i = 1; i < 5; i++) {
+            const newsList = await daumParser.getNewsList(rank.title, i == 1 ? 1 : i * 10 + 1);
+            for (const news of newsList) {
               RankCrawlNews.model.count({
                 where: {
-                  url: news.link
+                  url: news.link,
                 },
               }).then((count) => {
                 if (count === 0) {
@@ -43,9 +47,10 @@ export const crawlJob = new CronJob({
                     url: news.link,
                     title: news.title,
                     content: news.content,
-                    press: news.press
+                    plain_text: news.plain_text,
+                    press: news.press,
                   }).catch(() => {
-                    console.log(`Already exist in database - ${news.link}`);
+                    // console.log(`Already exist in database - ${news.link}`);
                   });
                 }
               });
@@ -61,7 +66,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-           rankHandler(rank);
+          rankHandler(rank);
         }
 
         parserInstance.param = daumParam;
@@ -76,7 +81,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-           rankHandler(rank);
+          rankHandler(rank);
         }
         parserInstance.param = paramZum;
         const zumResult = await parserInstance.getRank();
@@ -88,7 +93,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-           rankHandler(rank);
+          rankHandler(rank);
         }
         const nateResult = await nateParser.getNateRank();
         for (const rank of nateResult.data) {
@@ -101,7 +106,7 @@ export const crawlJob = new CronJob({
           }).catch(Sequelize.ValidationError, (err) => {
             console.log(err);
           });
-           rankHandler(rank);
+          rankHandler(rank);
         }
       });
     });
