@@ -3,13 +3,15 @@ import * as cheerio from 'cheerio';
 import * as iconv from 'iconv-lite';
 import delay from '../utils/delay';
 import commonHeaders from './common-headers';
+import { Parser } from './parser';
+import { NewsContent } from './news-content';
 
-export default class DaumParser{
+export default class DaumParser implements Parser {
 
-  getNewsContentByURL = async (url: string) => {
+  public async getNewsContent(newsURL: string): Promise<NewsContent> {
     await delay(1000);
     const response = await requestPromise({
-      uri: url,
+      uri: newsURL,
       headers: commonHeaders,
       encoding: null,
     });
@@ -27,12 +29,11 @@ export default class DaumParser{
       content: newsContent.html(),
       plain_text: newsContent.text(),
       press: $('.info_cp .thumb_g').attr('alt') || $('.info_cp').text().trim(),
-      link: url,
+      link: newsURL,
     };
-  };
+  }
 
-
-  getNewsList = async (searchKeyword: string, page: number) => {
+  public getNewsList = async (searchKeyword: string, page: number) => {
     const newsData: any = [];
     const queryURL = `https://search.daum.net/search`;
     try {
@@ -54,7 +55,7 @@ export default class DaumParser{
       for (const elem of $('.f_nb.date a')) {
         const $elem = $(elem);
         if ($elem.text().indexOf('다음뉴스') === 0) {
-          newsData.push(await this.getNewsContentByURL($elem.attr('href')));
+          newsData.push(await this.getNewsContent($elem.attr('href')));
         }
       }
 
