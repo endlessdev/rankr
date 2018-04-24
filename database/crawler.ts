@@ -12,6 +12,7 @@ import nateParser from '../utils/nate-parser';
 import naverParser from '../parsers/naver-parser';
 import commonParser from '../utils/common-parser';
 import DaumParser from '../parsers/daum-parser';
+import logger from "../utils/logger";
 
 
 const CronJob = require('cron').CronJob;
@@ -50,7 +51,7 @@ export const crawlJob = new CronJob({
                     plain_text: news.plain_text,
                     press: news.press,
                   }).catch(() => {
-                    // console.log(`Already exist in database - ${news.link}`);
+                    // logger.info(`Already exist in database - ${news.link}`);
                   });
                 }
               });
@@ -64,7 +65,7 @@ export const crawlJob = new CronJob({
             rank: rank.rank,
             title: rank.title,
           }).catch(Sequelize.ValidationError, (err) => {
-            console.log(err);
+            logger.info(err);
           });
           rankHandler(rank);
         }
@@ -79,7 +80,7 @@ export const crawlJob = new CronJob({
             status: rank.status,
             value: rank.value,
           }).catch(Sequelize.ValidationError, (err) => {
-            console.log(err);
+            logger.info(err);
           });
           rankHandler(rank);
         }
@@ -91,7 +92,7 @@ export const crawlJob = new CronJob({
             rank: rank.rank,
             title: rank.title,
           }).catch(Sequelize.ValidationError, (err) => {
-            console.log(err);
+            logger.info(err);
           });
           rankHandler(rank);
         }
@@ -104,7 +105,7 @@ export const crawlJob = new CronJob({
             status: rank.status,
             value: rank.value,
           }).catch(Sequelize.ValidationError, (err) => {
-            console.log(err);
+            logger.info(err);
           });
           rankHandler(rank);
         }

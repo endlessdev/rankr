@@ -53,7 +53,9 @@
     "tslint-config-airbnb": "^5.1.2",
     "typescript": "^2.3.3",
     "underscore": "^1.8.3",
-    "xml2js": "^0.4.17"
+    "winston": "^2.4.2",
+    "xml2js": "^0.4.17",
+    "yenv": "^2.1.0"
   },
   "devDependencies": {
     "assert": "^1.3.0",

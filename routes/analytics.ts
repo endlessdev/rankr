@@ -4,6 +4,7 @@ import * as Router from 'koa-router';
 import { sequelize, Sequelize } from '../database/index';
 import { RankType } from '../models/rank-type';
 import async = Q.async;
+import logger from "../utils/logger";
 
 const router = new Router({ prefix: '/v1/analytics' });
 
@@ -52,8 +53,8 @@ LIMIT 10;`;
 
   let result = [];
   await sequelize.query(RAW_QUERY).spread(async (results, metadata) => {
-    console.log(result);
-    console.log(metadata);
+    logger.info(result);
+    logger.info(metadata);
     result = results;
   });
 
@@ -123,11 +124,11 @@ router.get('/keyword/:keyword', async (ctx, next) => {
 
     await sequelize.query(RAW_QUERY).spread((results, metadata) => {
       response[rank] = results;
-      console.log(results);
+      logger.info(results);
     });
   }
 
-  console.log(response);
+  logger.info(response);
 
   ctx.body = response;
 

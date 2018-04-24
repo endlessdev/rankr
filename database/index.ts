@@ -1,6 +1,7 @@
 
 
 import * as yenv from 'yenv';
+import logger from "../utils/logger";
 const env = yenv();
 
 export const Sequelize = require('sequelize');
@@ -10,16 +11,16 @@ export const sequelize =
     host: env.DB_HOST,
     dialect: env.DB_DIALECT,
     timestamps: false,
-    logging: true,
+    logging: false,
   });
 
 const connectWithRetry = () => {
   return sequelize.authenticate()
     .then(() => {
-      console.log('Connection has been established successfully.');
+      logger.info('Connection has been established successfully.');
     })
     .catch((err) => {
-      console.log('Failed to connect to database on startup - retrying in 5 sec', (err));
+      logger.info('Failed to connect to database on startup - retrying in 5 sec', (err));
       setTimeout(connectWithRetry, 5000);
     });
 };
